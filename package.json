@@ -21,9 +21,9 @@
 		"dump": "node ./bin/compiler.js dump",
 		"lint": "npm run lint:js && npm run lint:css",
 		"lint:css": "wp-scripts lint-style ./src/**/*.scss",
-		"lint:js": "wp-scripts lint-js ./src",
+		"lint:js": "eslint ./src/js",
 		"imagemin": "node ./bin/imagemin.mjs src/img build/img",
-		"format:js": "wp-scripts format-js ./src",
+		"format:js": "eslint --fix ./src/js",
 		"watch": "npm-watch"
 	},
 	"engines": {
@@ -53,6 +53,7 @@
 		"autoprefixer": "^10.4.17",
 		"classnames": "^2.5.1",
 		"cssnano": "^6.0.3",
+		"eslint": "^8.56.0",
 		"glob": "^10.3.10",
 		"imagemin": "^8.0.1",
 		"imagemin-gifsicle": "^7.0.0",

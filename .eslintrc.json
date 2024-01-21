@@ -1,7 +1,0 @@
-{
-	"env": {
-		"browser": true,
-		"jquery": true
-	},
-	"extends": [ "plugin:@wordpress/eslint-plugin/recommended-with-formatting" ]
-}
