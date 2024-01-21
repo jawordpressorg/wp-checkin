@@ -1,19 +1,10 @@
 {
 	"env": {
-		"es6": true,
-		"browser": true
+		"browser": true,
+		"jquery": true
 	},
-	"globals": {
-		"jQuery": false
-	},
-	"parserOptions": {
-		"ecmaFeatures": {
-			"modules": true,
-			"jsx": true
-		},
-		"sourceType": "module"
-	},
-	"plugins": [
-		"react"
-	]
+	"extends": [ "plugin:@wordpress/eslint-plugin/recommended-with-formatting" ],
+	"rules": {
+		"import/no-extraneous-dependencies": "off"
+	}
 }

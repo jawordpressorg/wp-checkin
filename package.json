@@ -1,58 +1,114 @@
 {
-  "name": "wp-checkin",
-  "version": "1.0.0",
-  "description": "A checkinf form for WordCamp Tokyo 2019",
-  "main": "gulpfile.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "gulp default",
-    "watch": "gulp watch",
-    "gulp": "gulp",
-    "fix": "eslint --fix"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wct2019/wp-checkin.git"
-  },
-  "keywords": [
-    "wordpress"
-  ],
-  "author": "fumikito",
-  "license": "GPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/wct2019/wp-checkin/issues"
-  },
-  "homepage": "https://github.com/wct2019/wp-checkin#readme",
-  "devDependencies": {
-    "@babel/core": "^7.5.4",
-    "@babel/plugin-transform-react-jsx": "^7.0.0",
-    "@babel/polyfill": "^7.6.0",
-    "@babel/preset-env": "^7.5.4",
-    "@wordpress/eslint-plugin": "^3.0.0",
-    "autoprefixer": "^9.6.1",
-    "babel-eslint": "^10.0.1",
-    "babel-loader": "^8.0.5",
-    "classnames": "^2.2.6",
-    "eslint": "^6.0.1",
-    "eslint-plugin-react": "^7.16.0",
-    "gulp": "^4.0.2",
-    "gulp-eslint": "^6.0.0",
-    "gulp-imagemin": "^6.1.1",
-    "gulp-notify": "^3.2.0",
-    "gulp-plumber": "^1.2.1",
-    "gulp-postcss": "^8.0.0",
-    "gulp-rename": "^1.4.0",
-    "gulp-sass": "^4.0.2",
-    "gulp-sass-glob": "^1.1.0",
-    "gulp-sourcemaps": "^2.6.5",
-    "imagemin": "^6.0.0",
-    "imagemin-mozjpeg": "^8.0.0",
-    "imagemin-pngquant": "^6.0.1",
-    "merge-stream": "^2.0.0",
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
-    "vinyl-named": "^1.1.0",
-    "webpack": "^4.41.0",
-    "webpack-stream": "^5.2.1"
-  }
+	"name": "wp-checkin",
+	"version": "1.0.0",
+	"description": "A checkin system for WordCamp Tokyo.",
+	"main": "gulpfile.js",
+	"scripts": {
+		"start": "wp-env start",
+		"update": "wp-env start --update",
+		"stop": "wp-env stop",
+		"env": "wp-env",
+		"env:install": "wp core download --path=wordpress --locale=ja",
+		"env:download": "node ./bin/compiler.js env",
+		"cli": "wp-env run cli wp",
+		"cli:test": "wp-env run tests-cli wp",
+		"test": "RESULT=${PWD##*/} && wp-env run tests-cli ./wp-content/plugins/$RESULT/vendor/bin/phpunit -c ./wp-content/plugins/$RESULT/phpunit.xml.dist",
+		"build": "npm run build:js && npm run build:css && npm run dump && npm run imagemin",
+		"build:block": "wp-scripts build --webpack-src-dir=src/blocks --output-path=build/blocks",
+		"build:css": "sass ./src/scss/:./build/css/ --style=compressed && postcss ./build/css/**/*.css --use autoprefixer --replace",
+		"build:js": "node ./bin/compiler.js js",
+		"create:block": "node ./bin/compiler.js block",
+		"dump": "node ./bin/compiler.js dump",
+		"lint": "npm run lint:js && npm run lint:css",
+		"lint:css": "wp-scripts lint-style ./src/**/*.scss",
+		"lint:js": "eslint ./src/js",
+		"imagemin": "node ./bin/imagemin.mjs src/img build/img",
+		"format:js": "eslint --fix ./src/js",
+		"watch": "npm-watch"
+	},
+	"engines": {
+		"node": ">= 18.19.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jawordpressorg/wp-checkin.git"
+	},
+	"keywords": [
+		"wordpress"
+	],
+	"author": "Fumiki Takahashi and contributors",
+	"license": "GPL-3.0-or-later",
+	"bugs": {
+		"url": "https://github.com/jawordpressorg/wp-checkin/issues"
+	},
+	"homepage": "https://github.com/jawordpressorg/wp-checkin#readme",
+	"devDependencies": {
+		"@kunoichi/grab-deps": "^1.3.1",
+		"@wordpress/browserslist-config": "^5.32.0",
+		"@wordpress/create-block": "^4.33.0",
+		"@wordpress/env": "^9.1.0",
+		"@wordpress/eslint-plugin": "^17.6.0",
+		"@wordpress/scripts": "^27.0.0",
+		"@wordpress/stylelint-config": "^21.32.0",
+		"autoprefixer": "^10.4.17",
+		"classnames": "^2.5.1",
+		"cssnano": "^6.0.3",
+		"eslint": "^8.56.0",
+		"glob": "^10.3.10",
+		"imagemin": "^8.0.1",
+		"imagemin-gifsicle": "^7.0.0",
+		"imagemin-jpegtran": "^7.0.0",
+		"imagemin-pngquant": "^9.0.2",
+		"imagemin-svgo": "^10.0.1",
+		"npm-watch": "^0.11.0",
+		"postcss": "^8.4.33",
+		"postcss-cli": "^11.0.0",
+		"webpack-cli": "^5.1.4"
+	},
+	"watch": {
+		"build:block": {
+			"extensions": "js,scss,json",
+			"patterns": [
+				"src/blocks"
+			]
+		},
+		"build:css": {
+			"extensions": "scss",
+			"patterns": [
+				"src/scss"
+			]
+		},
+		"build:js": {
+			"extensions": "js",
+			"patterns": [
+				"src/js"
+			]
+		},
+		"dump": {
+			"extensions": "js,css,php,json",
+			"patterns": [
+				"build/js",
+				"build/css",
+				"build/blocks"
+			]
+		},
+		"imagemin": {
+			"extensions": "jpg,jpeg,gif,png,svg",
+			"patterns": [
+				"src/image"
+			]
+		},
+		"lint:css": {
+			"extensions": "scss",
+			"patterns": [
+				"src/scss"
+			]
+		},
+		"lint:js": {
+			"extensions": "js",
+			"patterns": [
+				"src"
+			]
+		}
+	}
 }
