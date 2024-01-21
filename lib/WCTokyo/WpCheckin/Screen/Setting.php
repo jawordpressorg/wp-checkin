@@ -30,7 +30,7 @@ class Setting extends SingletonPattern {
 			'wp_checkin_settings',
 			__( 'WordCamp チェックイン設定', 'wp-checkin' ),
 			function() {
-				printf( '<p>%s</p>',  esc_html__( 'WordCampのチェックインシステムに必要な設定を行います。', 'wp-checkin' ) );
+				printf( '<p>%s</p>', esc_html__( 'WordCampのチェックインシステムに必要な設定を行います。', 'wp-checkin' ) );
 			},
 			'general'
 		);

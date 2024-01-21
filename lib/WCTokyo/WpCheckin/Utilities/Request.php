@@ -24,7 +24,7 @@ trait Request {
 				'status' => 400,
 			] );
 		}
-		$url = get_option( 'wordcamp_site_url' );
+		$url  = get_option( 'wordcamp_site_url' );
 		$user = get_option( 'wordcamp_user_login' );
 		$pass = get_option( 'application_password' );
 		if ( ! $url || ! $user || ! $pass ) {
@@ -33,7 +33,7 @@ trait Request {
 			] );
 		}
 		$endpoint = trailingslashit( $url ) . 'wp-json/' . ltrim( $path, '/' );
-		$args = [
+		$args     = [
 			'method'  => $method,
 			'timeout' => (int) apply_filters( 'wp_checkin_timeout', 30, $path, $method, $data ),
 			'headers' => [
