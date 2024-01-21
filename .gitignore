@@ -1,5 +1,7 @@
 /vendor/
 /*firebase-key.json
+/composer.lock
 /node_modules/
 /logs/*.log
-/public/.well-known
+/build/
+/wordpress/
