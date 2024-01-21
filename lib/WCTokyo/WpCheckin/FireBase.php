@@ -10,11 +10,11 @@ use Google\Cloud\Firestore\FirestoreClient;
 class FireBase extends Singleton {
 
 	protected $credential_file_path = '';
-	
+
 	protected $database_url = '';
-	
+
 	protected $db = null;
-	
+
 	/**
 	 * Handle credential errors.
 	 *
@@ -26,19 +26,19 @@ class FireBase extends Singleton {
 		$this->credential_file_path = $setting_file_path;
 		$this->database_url         = $uri;
 	}
-	
+
 	/**
 	 * Get database client.
 	 *
 	 * @return FirestoreClient
 	 */
 	public function db() {
-		if ( is_null( $this->db) ) {
-			$factory = ( new Factory() )
+		if ( is_null( $this->db ) ) {
+			$factory   = ( new Factory() )
 				->withServiceAccount( $this->credential_file_path )
 				->withDatabaseUri( $this->database_url );
 			$firestore = $factory->createFirestore();
-			$this->db = $firestore->database();
+			$this->db  = $firestore->database();
 		}
 		return $this->db;
 	}

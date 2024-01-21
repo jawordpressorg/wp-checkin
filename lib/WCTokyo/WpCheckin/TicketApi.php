@@ -26,14 +26,14 @@ class TicketApi extends Singleton {
 			if ( ! $query ) {
 				throw new \Exception( '検索キーワードが指定されていません。', 404 );
 			}
-			$query = explode( ' ', str_replace( '　', ' ', $query ) );
+			$query  = explode( ' ', str_replace( '　', ' ', $query ) );
 			$result = $this->search( $query );
 			return $response->withJson( $result );
 		} catch ( \Exception $e ) {
 			return $response->withJson( [], 404 );
 		}
 	}
-	
+
 	/**
 	 * Handle CSV request.
 	 *
@@ -45,7 +45,8 @@ class TicketApi extends Singleton {
 		try {
 			$queries = [];
 			foreach ( [ 'f', 'g', 'e' ] as $key ) {
-				if ( $param = $request->getQueryParam( $key ) ) {
+				$param = $request->getQueryParam( $key );
+				if ( $param ) {
 					$queries[] = $param;
 				}
 			}
@@ -53,22 +54,22 @@ class TicketApi extends Singleton {
 				throw new \Exception( 'No queries set.' );
 			}
 			$result = $this->search( $queries );
-			if ( 1 !== count( $result) ) {
+			if ( 1 !== count( $result ) ) {
 				throw new \Exception( 'Not found.' );
 			}
 			list( $data ) = $result;
-			$url = sprintf( 'https://2019.tokyo.wp-checkin.com/ticket/%d', $data['id'] );
+			$url          = sprintf( 'https://2019.tokyo.wp-checkin.com/ticket/%d', $data['id'] );
 		} catch ( \Exception $e ) {
 			$url = 'https://2019.tokyo.wp-checkin.com';
 		} finally {
-			$src = str_replace( '&amp;', '&', $this->generate_qr( $url ) );
+			$src     = str_replace( '&amp;', '&', $this->generate_qr( $url ) );
 			$content = file_get_contents( $src );
 			header( 'Content-Type: image/png' );
 			echo $content;
 			exit;
 		}
 	}
-	
+
 	/**
 	 * Generate image url of qr code.
 	 *
@@ -77,7 +78,7 @@ class TicketApi extends Singleton {
 	 * @return string
 	 */
 	public function generate_qr( $text ) {
-		$url = 'https://chart.apis.google.com/chart?';
+		$url     = 'https://chart.apis.google.com/chart?';
 		$queries = [];
 		foreach ( [
 			'cht' => 'qr',
@@ -89,7 +90,7 @@ class TicketApi extends Singleton {
 		$url .= implode( '&amp;', $queries );
 		return $url;
 	}
-	
+
 	/**
 	 * Search tickets.
 	 *
@@ -98,17 +99,17 @@ class TicketApi extends Singleton {
 	 * @return array[]
 	 */
 	private function search( $query ) {
-		$result = [];
+		$result  = [];
 		$tickets = FireBase::get_instance()
-						   ->db()
-						   ->collection( 'Tickets' )
-						   ->documents();
+						->db()
+						->collection( 'Tickets' )
+						->documents();
 		foreach ( $tickets as $ticket ) {
 			/** @var DocumentSnapshot $ticket */
 			if ( ! $ticket->exists() ) {
 				continue;
 			}
-			$data  = $this->convert_to_array( $ticket );
+			$data   = $this->convert_to_array( $ticket );
 			$string = implode( '', $data );
 			foreach ( $query as $q ) {
 				if ( false === strpos( $string, $q ) ) {
@@ -119,7 +120,7 @@ class TicketApi extends Singleton {
 		}
 		return $result;
 	}
-	
+
 	/**
 	 * Returns JSON.
 	 *
@@ -137,7 +138,7 @@ class TicketApi extends Singleton {
 			return $response->withJson( null, 404 );
 		}
 	}
-	
+
 	/**
 	 * Handle post request.
 	 *
@@ -148,14 +149,14 @@ class TicketApi extends Singleton {
 	 */
 	public function handle_post( Request $request, Response $response, array $args ) {
 		try {
-			$document = $this->get_reference( $args[ 'ticket_id' ] );
+			$document = $this->get_reference( $args['ticket_id'] );
 			if ( ! $document->snapshot()->exists() ) {
 				throw new \Exception( '該当するチケットが存在しません。', 404 );
 			}
 			$document->update( [
 				[
-					'path' => 'checkedin',
-					'value' => date( 'Y-m-d H:i:s' ),
+					'path'  => 'checkedin',
+					'value' => date_i18n( 'Y-m-d H:i:s' ),
 				],
 			] );
 			return $response->withJson( $this->add_items( $this->convert_to_array( $document->snapshot() ) ) );
@@ -165,7 +166,7 @@ class TicketApi extends Singleton {
 			], $e->getCode() );
 		}
 	}
-	
+
 	/**
 	 * Uncheck document.
 	 *
@@ -176,13 +177,13 @@ class TicketApi extends Singleton {
 	 */
 	public function handle_delete( Request $request, Response $response, array $args ) {
 		try {
-			$document = $this->get_reference( $args[ 'ticket_id' ] );
+			$document = $this->get_reference( $args['ticket_id'] );
 			if ( ! $document->snapshot()->exists() ) {
 				throw new \Exception( '該当するチケットが存在しません。', 404 );
 			}
 			$document->update( [
 				[
-					'path' => 'checkedin',
+					'path'  => 'checkedin',
 					'value' => '',
 				],
 			] );
@@ -193,7 +194,7 @@ class TicketApi extends Singleton {
 			], $e->getCode() );
 		}
 	}
-	
+
 	/**
 	 * Handle CSV request.
 	 *
@@ -224,17 +225,17 @@ class TicketApi extends Singleton {
 				if ( ! $ticket->exists() ) {
 					continue;
 				}
-				$data  = $this->convert_to_array( $ticket );
+				$data = $this->convert_to_array( $ticket );
 				if ( ! empty( $data['checkedin'] ) ) {
 					$updated[ $data['id'] ] = $data['checkedin'];
 				}
 			}
 			// Read CSV.
 			$pointer = new \SplFileObject( $file->file );
-			$pointer->setFlags(\SplFileObject::READ_CSV);
+			$pointer->setFlags( \SplFileObject::READ_CSV );
 			$output = fopen( 'php://output', 'w' );
-			header('Content-Type: text/csv; charset=UTF-8');
-			header(sprintf( 'Content-Disposition: attachment; filename=wp-checkin-stats-%s.csv', date( 'Ymd' ) ) );
+			header( 'Content-Type: text/csv; charset=UTF-8' );
+			header( sprintf( 'Content-Disposition: attachment; filename=wp-checkin-stats-%s.csv', date_i18n( 'Ymd' ) ) );
 			// Output CSV headers.
 			fputcsv( $output, [
 				'id',
@@ -256,7 +257,7 @@ class TicketApi extends Singleton {
 				// Get data.
 				$id          = $row[0];
 				$mail        = md5( $row[4] );
-				$mail_bought = md5( $row[ 11 ] );
+				$mail_bought = md5( $row[11] );
 				$bought_at   = $row[5];
 				$status      = $row[7];
 				$coupon      = $row[9];
@@ -266,11 +267,11 @@ class TicketApi extends Singleton {
 				// Type of attendee.
 				if ( false !== strpos( $coupon, 'sponsor' ) ) {
 					$type = 'sponsor';
-				} else if ( false !== strpos( $coupon, 'staff' ) ) {
+				} elseif ( false !== strpos( $coupon, 'staff' ) ) {
 					$type = 'staff';
-				} else if ( false !== strpos( $coupon, 'thanks' ) ) {
+				} elseif ( false !== strpos( $coupon, 'thanks' ) ) {
 					$type = 'thanks';
-				} elseif ( false !== strpos( $title, 'マイクロスポンサー' ) )  {
+				} elseif ( false !== strpos( $title, 'マイクロスポンサー' ) ) {
 					$type = 'sponsor';
 				} else {
 					$type = 'general';
@@ -279,12 +280,12 @@ class TicketApi extends Singleton {
 				if ( isset( $updated[ $id ] ) ) {
 					$gmt = $updated[ $id ];
 					// TODO: Offset.
-					$checked_in = date( 'Y-m-d H:i:s', strtotime( $gmt ) +  60 * 60 * 9 );
+					$checked_in = date_i18n( 'Y-m-d H:i:s', strtotime( $gmt ) + 60 * 60 * 9 );
 				} else {
 					$checked_in = '';
 				}
 				$is_adult = ( false !== strpos( $over_20, 'Yes' ) ) ? 1 : 0;
-				$data = [
+				$data     = [
 					$id,
 					$status,
 					$type,
@@ -304,7 +305,7 @@ class TicketApi extends Singleton {
 				->write( $e->getMessage() );
 		}
 	}
-	
+
 	/**
 	 * Get document snapshot.
 	 *
@@ -318,7 +319,7 @@ class TicketApi extends Singleton {
 							->collection( 'Tickets' )
 							->document( $ticket_id );
 	}
-	
+
 	/**
 	 * Get document.
 	 *
@@ -333,7 +334,7 @@ class TicketApi extends Singleton {
 			return [];
 		}
 	}
-	
+
 	/**
 	 * Convert user data to array.
 	 *
@@ -342,7 +343,7 @@ class TicketApi extends Singleton {
 	 * @return array
 	 */
 	public function convert_to_array( $document ) {
-		$data = $document->data();
+		$data       = $document->data();
 		$data['id'] = $document->id();
 		// Add role.
 		$role = '一般参加';
@@ -357,7 +358,7 @@ class TicketApi extends Singleton {
 			}
 		}
 		if ( false !== strpos( $data['category'], 'マイクロスポンサー' ) ) {
-			 $role = 'マイクロスポンサー';
+			$role = 'マイクロスポンサー';
 		}
 		$data['role'] = $role;
 		$sorted       = [
@@ -365,14 +366,14 @@ class TicketApi extends Singleton {
 			'givenname'  => $data['givenname'],
 		];
 		foreach ( $data as $key => $val ) {
-			if ( in_array( $key, [ 'familyname', 'givenname' ] ) ) {
+			if ( in_array( $key, [ 'familyname', 'givenname' ], true ) ) {
 				continue;
 			}
 			$sorted[ $key ] = $val;
 		}
 		return $sorted;
 	}
-	
+
 	/**
 	 * Convert array
 	 *
@@ -399,7 +400,7 @@ class TicketApi extends Singleton {
 		if ( false !== strpos( $document['role'], 'スピーカー' ) ) {
 			$document['items'][] = 'Tシャツ（緑） - 要サイズ確認';
 		}
-		
+
 		return $document;
 	}
 }
