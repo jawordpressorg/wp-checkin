@@ -25,5 +25,5 @@ function wp_checkin_init() {
 	// Load composer if exists.
 	require_once __DIR__ . '/vendor/autoload.php';
 	// Bootstrap plugins.
-
+	\WCTokyo\WpCheckin\Bootstrap::get_instance();
 }
