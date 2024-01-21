@@ -1,6 +1,6 @@
 {
-    "name": "wct2019/wp-checkin",
-    "description": "A Web form for WordCamp Tokyo 2019 reception.",
+    "name": "jawordpressorg/wp-checkin",
+    "description": "WordCamp Checkin System.",
     "type": "project",
     "license": "GPL-3.0-or-later",
     "authors": [
@@ -11,23 +11,27 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": "^7.0",
-        "slim/slim": "^3.12",
-        "slim/php-view": "^2.2",
-        "monolog/monolog": "^1.25",
-        "hametuha/singleton-pattern": "^1.1",
-        "kreait/firebase-php": "^4.34",
-        "google/cloud-firestore": "^1.9"
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.0",
+        "wp-coding-standards/wpcs": "^2.0",
+        "phpcompatibility/php-compatibility": "^9.3",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
     },
     "autoload": {
         "psr-0": {
-            "WCTokyo\\WpCheckin": "src"
+            "WCTokyo\\WpCheckin": "lib"
         }
     },
     "config": {
-        "process-timeout": 0
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     },
     "scripts": {
-        "start": "php -S localhost:8080 -t public index.php"
+		"test": "phpunit",
+		"lint": "phpcs --standard=phpcs.ruleset.xml $(find ./ -name '*.php')",
+		"fix": "phpcbf --standard=phpcs.ruleset.xml $(find ./ -name '*.php')"
     }
 }

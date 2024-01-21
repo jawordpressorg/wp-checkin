@@ -1,0 +1,113 @@
+name: Deploy Plugin
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lint:
+    name: Check PHP Codes
+    uses: tarosky/workflows/.github/workflows/phpcs.yml@main
+    with:
+      version: 7.4
+
+  assets:
+    name: Assets Test
+    uses: tarosky/workflows/.github/workflows/npm.yml@main
+    with:
+      node_version: 18
+      package: build
+
+
+  status-check:
+    name: Status Check
+    runs-on: ubuntu-latest
+    needs: [ lint, assets ]
+    steps:
+      - name: Display Status
+        run: echo "Status Check Passed"
+
+  release:
+    name: Deploy Production Server
+    needs: [ status-check ]
+    if: contains(github.ref, 'tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@main
+
+      - name: Setup PHP with composer v2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          tools: composer
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Build Plugin
+        run: |
+          composer install --no-dev --no-interaction --no-progress --optimize-autoloader --prefer-dist
+          npm install
+          npm run build
+
+      - name: Generate readme.txt
+        uses: tarosky/workflows/actions/wp-readme@main
+
+      - name: Versioning
+        uses: tarosky/workflows/actions/versioning@main
+        with:
+          version: ${{ github.ref }}
+          files: wp-checkin.php, readme.txt
+
+      - name: Deploy to Production Server
+        id: deployproduction
+        uses: Pendect/action-rsyncer@v1.1.0
+        env:
+          DEPLOY_KEY: ${{secrets.DEPLOY_RSA_KEY}}
+        with:
+          flags: '-rptv --checksum --delete'
+          options: '--exclude-from=.distignore'
+          ssh_options: ''
+          src: './'
+          dest: "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/home/users/2/${{ secrets.DEPLOY_USER }}/web/wp-checkin/wp-content/plugins/${{ github.event.repository.name }}/"
+
+      - name: Display Deploy Status
+        run: echo "${{ matrix.site }} - ${{ steps.deployproduction.outputs.status }}"
+
+      - name: Clean Package
+        uses: tarosky/workflows/actions/distignore@main
+
+      - name: Zip Archive
+        run: zip -r ${{ github.event.repository.name }}.zip ./
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/${{ github.event.repository.name }}.zip
+          asset_name: ${{ github.event.repository.name }}.zip
+          asset_content_type: application/zip

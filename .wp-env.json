@@ -1,0 +1,10 @@
+{
+	"core": null,
+	"plugins": [
+		"."
+	],
+	"phpVersion": "7.4",
+	"themes": [
+		"https://downloads.wordpress.org/theme/twentytwentyfour.latest-stable.zip"
+	]
+}
