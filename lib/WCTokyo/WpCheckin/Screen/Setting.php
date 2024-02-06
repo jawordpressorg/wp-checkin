@@ -88,7 +88,7 @@ class Setting extends SingletonPattern {
 		$action = add_query_arg( [
 			'action' => $this->ajax_action,
 		], admin_url( 'admin-ajax.php' ) );
-		$csv     = array_filter( explode( "\n", get_option( 'wordcamp_csv_file' ) ) );
+		$csv     = (array) get_option( 'wordcamp_csv_file' );
 		$updated = get_option( 'wordcamp_csv_updated' );
 		$errors = [
 			__( '権限がありません。', 'wp-checkin' ),
@@ -150,8 +150,18 @@ class Setting extends SingletonPattern {
 			if ( ! file_exists( $file['tmp_name'] ) ) {
 				throw new \Exception( 4 );
 			}
-			$csv = file_get_contents( $file['tmp_name'] );
-			update_option( 'wordcamp_csv_file', $csv );
+			// Convert CSV to array.
+			$tickets = [];
+			$csv = new \SplFileObject( $file['tmp_name'], 'r' );
+			$csv->setFlags( \SplFileObject::READ_CSV );
+			$index = 0;
+			foreach ( $csv as $row ) {
+				if ( $index && ! empty( $row ) ) {
+					$tickets[] = $row;
+				}
+				$index++;
+			}
+			update_option( 'wordcamp_csv_file', $tickets );
 			update_option( 'wordcamp_csv_updated', current_time( 'mysql' ) );
 			wp_safe_redirect( add_query_arg( [
 				'page'    => 'wp-checkin',

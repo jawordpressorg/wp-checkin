@@ -1,5 +1,18 @@
 @charset "UTF-8";
 
+/*!
+ * Import all the styles for the components
+ *
+ * @handle wp-checkin
+ * @deps dashicons
+ */
+
+$wp-blue: #0073aa;
+$wp-blue-dark: #005f86;
+$wp-red: #d54e21;
+$invert-color: #fff;
+
+@import "components/header";
 @import "components/footer";
 @import "components/layout";
 @import "components/search";

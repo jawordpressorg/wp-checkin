@@ -1,0 +1,64 @@
+
+.wp-checkin-header {
+	padding: 15px 0;
+	background-color: $wp-blue;
+	color: $invert-color;
+	text-align: center;
+}
+
+.wp-checkin-nav {
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: space-between;
+
+	img {
+		width: 40px;
+		height: 40px;
+
+		:hover {
+			opacity: .6;
+		}
+	}
+
+	a:link,
+	a:visited {
+		color: $invert-color;
+		text-decoration: none;
+	}
+
+	a:hover,
+	a:active {
+		color: $wp-red;
+		text-decoration: none;
+	}
+
+	.dashicons{
+		font-size: 32px;
+		width: 32px;
+		height: 32px;
+		&::before {
+			width: 32px;
+			height: 32px;
+		}
+	}
+	.wp-checking-source,
+	.wp-checkin-home {
+		display: inline-block;
+	}
+	.wp-checkin-source {
+		padding-right: 15px;
+	}
+	.wp-checkin-home {
+		padding-left: 15px;
+
+	}
+}
+
+h1.wp-checkin-title {
+	text-align: center;
+	color: $wp-blue-dark;
+	font-size: 32px;
+	margin: 0;
+	padding: 20px 0;
+}

@@ -27,3 +27,34 @@ function wp_checkin_init() {
 	// Bootstrap plugins.
 	\WCTokyo\WpCheckin\Bootstrap::get_instance();
 }
+
+/**
+ * Get template part.
+ *
+ * @param string $name Relative path of template file on plugin root.
+ * @param array $args Optional arguments.
+ *
+ * @return void
+ */
+function wp_checkin_template( $name, $args = [] ) {
+	$path = __DIR__ . '/' . ltrim( $name, '/' );
+	if ( ! preg_match( '/\.php$/u', $path ) ) {
+		// If no extension, add .php.
+		$path .= '.php';
+	}
+	if ( ! file_exists( $path ) ) {
+		return;
+	}
+	load_template( $path, false, $args );
+}
+
+/**
+ * Get URL of plugin.
+ *
+ * @param string $path Relative path from plugin root.
+ *
+ * @return string
+ */
+function wp_checkin_url( $path = '' ) {
+	return plugins_url( $path, __FILE__ );
+}
