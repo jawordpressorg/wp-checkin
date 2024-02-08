@@ -1,51 +1,90 @@
-.ticket{
+.wp-checkin-return {
+	margin: 20px 0;
 
-  &-wrapper{
-    position: relative;
-    max-width: 600px;
-    margin: 40px auto;
-    @media only screen and ( max-width: 480px ) {
-      font-size: 12px;
-    }
-  }
+	a {
+		display: inline-block;
+		padding: 5px 10px;
+		vertical-align: middle;
+		border-radius: 3px;
 
-  &-checked{
-    margin-top: 40px;
-    &-title{
-      position: relative;
-      margin-top: 40px;
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-      padding-bottom: 20px;
-      margin-bottom: 20px;
-      &:after{
-        content: "";
-        display: block;
-        position: absolute;
-        width: 100px;
-        height: 5px;
-        left: 50%;
-        bottom: 10px;
-        transform: translateX( -50% );
-      }
-    }
-    &-list{
-      font-size: 18px;
-      li{
-        margin: 10px 0;
-      }
-    }
-  }
+		+ a {
+			margin-left: 20px;
+		}
+
+		&:link,
+		&:visited {
+			border: 1px solid $wp-blue-dark;
+			color: $wp-blue-dark;
+			background-color: $invert-color;
+			text-decoration: none;
+		}
+
+		&:hover,
+		&:active {
+			border: 1px solid $wp-blue-dark;
+			color: $invert-color;
+			background-color: $wp-blue-dark;
+			text-decoration: none;
+		}
+
+	}
 }
 
-.page-header{
-  @media only screen and ( max-width: 480px ) {
-    a {
-      font-size: 12px;
-    }
-    &-title {
-      font-size: 18px;
-    }
-  }
+.wp-checkin-owner {
+	text-align: center;
+	margin: 20px 0;
+
+	h2 {
+		margin: 20px 0;
+		font-size: 18px;
+		font-weight: bold;
+	}
+
+	small {
+		display: block;
+		color: #666;
+		font-weight: bold;
+		font-size: 16px;
+		margin: 20px 0;
+	}
+
+	button {
+		padding: 5px 15px;
+		font-size: 16px;
+	}
+}
+
+.wp-checkin-ticket-detail {
+	margin: 20px 0;
+	table-layout: auto;
+	border-collapse: collapse;
+	width: 100%;
+
+	th,
+	td {
+		padding: 10px;
+		border: 1px solid #eee;
+		box-sizing: border-box;
+	}
+
+	th {
+		text-align: left;
+	}
+
+	td {
+		text-align: left;
+	}
+
+	@media screen and ( max-width: 450px ) {
+		th,
+		td {
+			display: block;
+			width: 100%;
+		}
+	}
+	@media screen and ( min-width: 451px ) {
+		th {
+			width: 50%;
+		}
+	}
 }

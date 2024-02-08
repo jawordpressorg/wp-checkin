@@ -154,12 +154,10 @@ class Setting extends SingletonPattern {
 			$tickets = [];
 			$csv = new \SplFileObject( $file['tmp_name'], 'r' );
 			$csv->setFlags( \SplFileObject::READ_CSV );
-			$index = 0;
 			foreach ( $csv as $row ) {
-				if ( $index && ! empty( $row ) ) {
+				if ( ! empty( $row ) ) {
 					$tickets[] = $row;
 				}
-				$index++;
 			}
 			update_option( 'wordcamp_csv_file', $tickets );
 			update_option( 'wordcamp_csv_updated', current_time( 'mysql' ) );

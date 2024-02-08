@@ -58,3 +58,24 @@ function wp_checkin_template( $name, $args = [] ) {
 function wp_checkin_url( $path = '' ) {
 	return plugins_url( $path, __FILE__ );
 }
+
+/**
+ * Get the name of ticket owner.
+ *
+ * @param array $ticket
+ * @return string
+ */
+function wp_checkin_ticket_owner( $ticket ) {
+	// translators: %1$s is first name, %2$s is last name.
+	return sprintf( _x( '%2$s %1$s', 'full-name', 'wp-checkin' ), $ticket[2], $ticket[3] );
+}
+
+/**
+ * Get ticket detail with key=value array.
+ *
+ * @param array $ticket
+ * @return array
+ */
+function wp_checkin_ticket_detail( $ticket ) {
+	return \WCTokyo\WpCheckin\Tickets::get_meta( $ticket );
+}

@@ -74,7 +74,7 @@
 		"handle": "wp-checkin",
 		"path": "build/css/style.css",
 		"ext": "css",
-		"hash": "755fc9ba18bc8cd12740f3bbdb37c7f2",
+		"hash": "0c8ab939e51184604a20523293a8e13d",
 		"version": "0.0.0",
 		"deps": [
 			"dashicons"

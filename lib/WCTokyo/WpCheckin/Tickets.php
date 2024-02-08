@@ -27,7 +27,7 @@ class Tickets {
 	 * @return array|null
 	 */
 	public static function filter( $value, $index ) {
-		foreach ( self::tickets() as $ticket ) {
+		foreach ( self::tickets( false ) as $ticket ) {
 			if ( isset( $ticket[ $index ] ) && $ticket[ $index] == $value ) {
 				return $ticket;
 			}
@@ -40,8 +40,12 @@ class Tickets {
 	 *
 	 * @return array[]
 	 */
-	public static function tickets() {
-		return (array) get_option( 'wordcamp_csv_file' );
+	public static function tickets( $include_header = true ) {
+		$tickets = (array) get_option( 'wordcamp_csv_file' );
+		if ( ! $include_header && count( $tickets ) ) {
+			array_shift( $tickets );
+		}
+		return $tickets;
 	}
 
 	/**
@@ -54,13 +58,13 @@ class Tickets {
 	 */
 	public static function search( $query = '', $page = 1 ) {
 		if ( $query ) {
-			$tickets = array_filter( self::tickets(), function( $ticket ) use ( $query ) {
+			$tickets = array_filter( self::tickets( false ), function( $ticket ) use ( $query ) {
 				// Flatten array.
 				$str = implode( '', $ticket );
 				return str_contains( $str, $query );
 			} );
 		} else {
-			$tickets = self::tickets();
+			$tickets = self::tickets( false );
 		}
 		$per_page = 100;
 		$offset   = ( $page - 1 ) * $per_page;
@@ -79,5 +83,30 @@ class Tickets {
 			'current' => $page,
 			'total'   => $total,
 		];
+	}
+
+	/**
+	 * Get meta information of a ticket.
+	 *
+	 * @param array $ticket Ticket array.
+	 * @return array
+	 */
+	public static function get_meta( $ticket ) {
+		$tickets = self::tickets( true );
+		if ( 1 > count( $tickets ) ) {
+			return [];
+		}
+		$meta = [];
+		$prohibited = [
+			0, 1, 2, 3, // ID, 名前、メール
+			8, // トランザクションID
+
+		];
+		foreach ( $tickets[0] as $index => $label ) {
+			if ( ! in_array( $index, $prohibited, false ) ) {
+				$meta[ $label ] = $ticket[ $index ];
+			}
+		}
+		return $meta;
 	}
 }

@@ -27,7 +27,7 @@ $result = \WCTokyo\WpCheckin\Tickets::search( get_query_var( 's' ), $page );
 
 <?php if ( empty( $result['tickets'] ) ) : ?>
 
-	<p class="wp-checkin-not-found"><?php esc_html_e( '該当するチケットは見つかりませんでした。条件を変えて検索してください。', 'wp-checkin' ) ?></p>
+	<?php wp_checkin_template( 'template-parts/no-found' ); ?>
 
 <?php else: ?>
 
@@ -44,10 +44,7 @@ $result = \WCTokyo\WpCheckin\Tickets::search( get_query_var( 's' ), $page );
 			<tr class="wp-checkin-row">
 				<td>
 					<a href="<?php echo home_url( '/checkin/ticket/' . $ticket[0] ); ?>">
-						<?php
-						// translators: %1$s is first name, %2$s is last name.
-						echo esc_html( sprintf( _x( '%2$s %1$s', 'full-name', 'wp-checkin' ), $ticket[2], $ticket[3] ) );
-						?>
+						<?php echo esc_html( wp_checkin_ticket_owner( $ticket ) ); ?>
 						<small>
 							<?php echo esc_html( $ticket[4] ); ?>
 						</small>

@@ -5,5 +5,40 @@
  * @var array $args
  */
 
+$ticket = \WCTokyo\WpCheckin\Tickets::get( $args['id'] );
+?>
+<p class="wp-checkin-return">
+	<a href="<?php echo esc_url( home_url( '/checkin' ) ); ?>">
+		<span class="dashicons dashicons-tickets"></span>
+		<?php esc_html_e( 'チケット検索', 'wp-checkin' ); ?>
+	</a>
+	<a href="#" onclick="window.history.back();">
+		<span class="dashicons dashicons-redo"></span>
+		<?php esc_html_e( '一つ戻る', 'wp-checkin' ) ?>
+	</a>
+</p>
 
-var_dump( \WCTokyo\WpCheckin\Tickets::get( $args['id'] ) );
+<?php
+if ( ! $ticket ) {
+	wp_checkin_template( 'template-parts/no-found' );
+	return;
+}
+?>
+
+<hr />
+
+<div class="wp-checkin-owner">
+	<h2><?php echo esc_html( wp_checkin_ticket_owner( $ticket ) ); ?></h2>
+	<small><?php echo esc_html( $ticket[1] ); ?></small>
+
+	<button>オス</button>
+</div>
+
+<table class="wp-checkin-ticket-detail">
+	<?php foreach ( wp_checkin_ticket_detail( $ticket ) as $label => $value ) : ?>
+	<tr>
+		<th><?php echo esc_html( $label ); ?></th>
+		<td><?php echo esc_html( $value ); ?></td>
+	</tr>
+	<?php endforeach; ?>
+</table>
