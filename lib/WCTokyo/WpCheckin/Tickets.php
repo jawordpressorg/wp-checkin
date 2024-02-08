@@ -109,4 +109,19 @@ class Tickets {
 		}
 		return $meta;
 	}
+
+	/**
+	 * Is this ticket checked in?
+	 *
+	 * @param int $ticket_id
+	 *
+	 * @return null|\WP_Post
+	 */
+	public static function is_checked_in( $ticket_id ) {
+		$ticket = self::get( $ticket_id );
+		if ( ! $ticket ) {
+			return null;
+		}
+		return get_page_by_path( $ticket_id, OBJECT, 'checkin-log' );
+	}
 }

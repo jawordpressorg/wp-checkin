@@ -51,6 +51,19 @@
 	button {
 		padding: 5px 15px;
 		font-size: 16px;
+		cursor: pointer;
+		border-radius: 3px;
+		box-shadow: none;
+
+		&.wp-checkin-btn-checked-in:hover {
+			background-color: $wp-red;
+			border-color: $wp-red;
+			color: $invert-color;
+		}
+
+		+p {
+			color: green;
+		}
 	}
 }
 
@@ -75,6 +88,10 @@
 		text-align: left;
 	}
 
+	tr:nth-child(even) {
+		background-color: #f1f1f1;
+	}
+
 	@media screen and ( max-width: 450px ) {
 		th,
 		td {
@@ -88,3 +105,5 @@
 		}
 	}
 }
+
+

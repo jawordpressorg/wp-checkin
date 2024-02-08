@@ -31,14 +31,14 @@ if ( ! $ticket ) {
 	<h2><?php echo esc_html( wp_checkin_ticket_owner( $ticket ) ); ?></h2>
 	<small><?php echo esc_html( $ticket[1] ); ?></small>
 
-	<button>オス</button>
+	<div id="wp-checkin-attendance" data-ticket-id="<?php echo esc_attr( $ticket[0] ); ?>"></div>
 </div>
 
 <table class="wp-checkin-ticket-detail">
 	<?php foreach ( wp_checkin_ticket_detail( $ticket ) as $label => $value ) : ?>
 	<tr>
 		<th><?php echo esc_html( $label ); ?></th>
-		<td><?php echo esc_html( $value ); ?></td>
+		<td><?php echo esc_html( $value ?: '---' ); ?></td>
 	</tr>
 	<?php endforeach; ?>
 </table>

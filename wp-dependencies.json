@@ -1,5 +1,20 @@
 [
 	{
+		"handle": "wp-checkin-attendance",
+		"path": "build/js/attendance.js",
+		"ext": "js",
+		"hash": "07aa1c429f03aa46c7ae0718ef846ebd",
+		"version": "0.0.0",
+		"deps": [
+			"react",
+			"wp-element",
+			"wp-api-fetch",
+			"wp-i18n"
+		],
+		"footer": true,
+		"media": "all"
+	},
+	{
 		"handle": "app",
 		"path": "build/js/app.js",
 		"ext": "js",
@@ -74,7 +89,7 @@
 		"handle": "wp-checkin",
 		"path": "build/css/style.css",
 		"ext": "css",
-		"hash": "0c8ab939e51184604a20523293a8e13d",
+		"hash": "9c08016b1df5a350dbf77eea93e01b74",
 		"version": "0.0.0",
 		"deps": [
 			"dashicons"

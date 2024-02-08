@@ -17,6 +17,7 @@ class Bootstrap extends SingletonPattern {
 	protected function init() {
 		Setting::get_instance();
 		Router::get_instance();
+		RestApi::get_instance();
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			\WP_CLI::add_command( 'checkin', Command::class );
 		}
