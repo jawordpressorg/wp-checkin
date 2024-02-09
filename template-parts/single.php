@@ -14,7 +14,7 @@ $ticket = \WCTokyo\WpCheckin\Tickets::get( $args['id'] );
 	</a>
 	<a href="#" onclick="window.history.back();">
 		<span class="dashicons dashicons-redo"></span>
-		<?php esc_html_e( '一つ戻る', 'wp-checkin' ) ?>
+		<?php esc_html_e( '一つ戻る', 'wp-checkin' ); ?>
 	</a>
 </p>
 

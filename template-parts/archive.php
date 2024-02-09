@@ -29,14 +29,14 @@ $result = \WCTokyo\WpCheckin\Tickets::search( get_query_var( 's' ), $page );
 
 	<?php wp_checkin_template( 'template-parts/no-found' ); ?>
 
-<?php else: ?>
+<?php else : ?>
 
 	<table class="wp-checkin-table">
 		<thead>
 		<tr>
-			<th><?php esc_html_e( '氏名', 'wp-checkin' ) ?></th>
+			<th><?php esc_html_e( '氏名', 'wp-checkin' ); ?></th>
 			<th class="wp-checkin-hidden"><?php esc_html_e( '種別', 'wp-checkin' ); ?></th>
-			<th><?php esc_html_e( '購入日', 'wp-checkin' ) ?></th>
+			<th><?php esc_html_e( '購入日', 'wp-checkin' ); ?></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -53,7 +53,7 @@ $result = \WCTokyo\WpCheckin\Tickets::search( get_query_var( 's' ), $page );
 				<td class="wp-checkin-hidden">
 					<?php echo esc_html( $ticket[1] ); ?>
 				</td>
-				<td><?php echo esc_html( mysql2date( get_option( 'date_format' ), $ticket[5] ) ) ?></td>
+				<td><?php echo esc_html( mysql2date( get_option( 'date_format' ), $ticket[5] ) ); ?></td>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>
@@ -82,4 +82,5 @@ $result = \WCTokyo\WpCheckin\Tickets::search( get_query_var( 's' ), $page );
 			</ul>
 		</nav>
 	<?php endif; ?>
-<?php endif;
+	<?php
+endif;

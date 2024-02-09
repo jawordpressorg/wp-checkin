@@ -25,14 +25,14 @@ class RestApi extends SingletonPattern {
 	 */
 	public function register_post() {
 		register_post_type( 'checkin-log', [
-			'public'       => false,
-			'show_in_rest' => false,
-			'supports'     => [ 'title', 'editor', 'slug' ],
-			'show_ui'      => true,
+			'public'            => false,
+			'show_in_rest'      => false,
+			'supports'          => [ 'title', 'editor', 'slug' ],
+			'show_ui'           => true,
 			'show_in_nav_menus' => false,
 			'show_in_admin_bar' => false,
 			'menu_icon'         => 'dashicons-tickets-alt',
-			'labels'       => [
+			'labels'            => [
 				'name'          => _x( 'チェックイン記録', '', 'wp-checkin' ),
 				'singular_name' => _x( 'チェックイン記録', '', 'wp-checkin' ),
 			],
@@ -51,24 +51,24 @@ class RestApi extends SingletonPattern {
 			'permission_callback' => '__return_true',
 			'args'                => [
 				'ticket_id' => [
-					'required' => true,
-					'type'     => 'integer',
+					'required'          => true,
+					'type'              => 'integer',
 					'validate_callback' => function( $param ) {
 						return is_numeric( $param );
 					},
 				],
-				'auth_user'   => [
-					'required' => true,
-					'type'     => 'string',
+				'auth_user' => [
+					'required'          => true,
+					'type'              => 'string',
 					'validate_callback' => function( $param ) {
-						return $param === get_option( 'wordcamp_auth_user' );
+						return get_option( 'wordcamp_auth_user' ) === $param;
 					},
 				],
-				'auth_pass'   => [
-					'required' => true,
-					'type'     => 'string',
+				'auth_pass' => [
+					'required'          => true,
+					'type'              => 'string',
 					'validate_callback' => function( $param ) {
-						return $param === get_option( 'wordcamp_auth_pass' );
+						return get_option( 'wordcamp_auth_pass' ) === $param;
 					},
 				],
 			],
@@ -97,7 +97,8 @@ class RestApi extends SingletonPattern {
 					] );
 				}
 				$post_id = wp_insert_post( [
-					'post_title'  => sprintf( __( '#%d %s', 'wp-checkin' ), $ticket[0], wp_checkin_ticket_owner( $ticket ) ),
+					// translators: %1$d is ticket ID, %2$s is ticket owner name.
+					'post_title'  => sprintf( __( '#%1$d %2$s', 'wp-checkin' ), $ticket[0], wp_checkin_ticket_owner( $ticket ) ),
 					'post_name'   => $ticket[0],
 					'post_type'   => 'checkin-log',
 					'post_date'   => current_time( 'mysql' ),

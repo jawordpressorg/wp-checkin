@@ -41,7 +41,7 @@
 
 <div class="wp-checkin-container">
 
-	<h1 class="wp-checkin-title"><?php bloginfo( 'name' ) ?></h1>
+	<h1 class="wp-checkin-title"><?php bloginfo( 'name' ); ?></h1>
 
 	<main class="wp-checkin-main">
 

@@ -85,18 +85,18 @@ class Setting extends SingletonPattern {
 	 * @return void
 	 */
 	protected function csv_form() {
-		$action = add_query_arg( [
+		$action  = add_query_arg( [
 			'action' => $this->ajax_action,
 		], admin_url( 'admin-ajax.php' ) );
 		$csv     = (array) get_option( 'wordcamp_csv_file' );
 		$updated = get_option( 'wordcamp_csv_updated' );
-		$errors = [
+		$errors  = [
 			__( '権限がありません。', 'wp-checkin' ),
 			__( '不正なリクエストです。', 'wp-checkin' ),
 			__( 'ファイルがアップロードされていません。', 'wp-checkin' ),
 			__( 'CSVファイルをアップロードしてください。', 'wp-checkin' ),
 		];
-		$error = filter_input( INPUT_GET, 'error' );
+		$error   = filter_input( INPUT_GET, 'error' );
 		if ( isset( $errors[ $error ] ) ) {
 			printf(
 				'<div class="error"><p>%s</p></div>',
@@ -152,7 +152,7 @@ class Setting extends SingletonPattern {
 			}
 			// Convert CSV to array.
 			$tickets = [];
-			$csv = new \SplFileObject( $file['tmp_name'], 'r' );
+			$csv     = new \SplFileObject( $file['tmp_name'], 'r' );
 			$csv->setFlags( \SplFileObject::READ_CSV );
 			foreach ( $csv as $row ) {
 				if ( ! empty( $row ) ) {
@@ -163,7 +163,7 @@ class Setting extends SingletonPattern {
 			update_option( 'wordcamp_csv_updated', current_time( 'mysql' ) );
 			wp_safe_redirect( add_query_arg( [
 				'page'    => 'wp-checkin',
-				'success' => 'true'
+				'success' => 'true',
 			], admin_url( 'options-general.php' ) ) );
 			exit;
 		} catch ( \Exception $e ) {

@@ -63,6 +63,7 @@ class Router extends SingletonPattern {
 					] );
 					$id   = get_query_var( 'p' );
 					$args = [
+						// translators: %d is ticket ID.
 						'title' => sprintf( __( 'チケット: %d', 'wp-checkin' ), $id ),
 						'id'    => get_query_var( 'p' ),
 					];
@@ -70,12 +71,13 @@ class Router extends SingletonPattern {
 			}
 			// Create fake post.
 			$GLOBALS['post'] = new \WP_Post( (object) [
-				'ID'          => 0,
-				'post_title'  => $args['title'],
-				'post_status' => 'publish',
+				'ID'            => 0,
+				'post_title'    => $args['title'],
+				'post_status'   => 'publish',
 				'comment_count' => 0,
 			] );
 			remove_action( 'wp_head', 'feed_links_extra', 3 );
+			// Do authorization header.
 			do_action( 'template_redirect' );
 			wp_checkin_template( 'template-parts/header', $args );
 			wp_checkin_template( 'template-parts/' . $is_checkin, $args );

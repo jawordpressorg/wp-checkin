@@ -28,7 +28,8 @@ class Tickets {
 	 */
 	public static function filter( $value, $index ) {
 		foreach ( self::tickets( false ) as $ticket ) {
-			if ( isset( $ticket[ $index ] ) && $ticket[ $index] == $value ) {
+			// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+			if ( isset( $ticket[ $index ] ) && $ticket[ $index ] == $value ) {
 				return $ticket;
 			}
 		}
@@ -96,13 +97,17 @@ class Tickets {
 		if ( 1 > count( $tickets ) ) {
 			return [];
 		}
-		$meta = [];
+		$meta       = [];
 		$prohibited = [
-			0, 1, 2, 3, // ID, 名前、メール
+			0,
+			1,
+			2,
+			3, // ID, 名前、メール
 			8, // トランザクションID
 
 		];
 		foreach ( $tickets[0] as $index => $label ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.FoundNonStrictFalse
 			if ( ! in_array( $index, $prohibited, false ) ) {
 				$meta[ $label ] = $ticket[ $index ];
 			}
