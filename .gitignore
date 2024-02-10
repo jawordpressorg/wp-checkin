@@ -5,3 +5,4 @@
 /logs/*.log
 /build/
 /wordpress/
+wp-dependencies.json
