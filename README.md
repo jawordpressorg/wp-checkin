@@ -1,4 +1,7 @@
 # wp-checkin
+
+Version: nightly
+
 A check-in helper for [WordCamp Tokyo 2019](https://2019.tokyo.wordcamp.org)
 
 ## Install
