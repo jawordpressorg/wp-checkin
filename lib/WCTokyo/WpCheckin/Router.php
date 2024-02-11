@@ -46,6 +46,7 @@ class Router extends SingletonPattern {
 			return;
 		}
 		if ( in_array( $is_checkin, [ 'archive', 'single' ], true ) ) {
+			$do_auth_header = true;
 			wp_enqueue_style( 'wp-checkin' );
 			// Load template and exit.
 			$args = [];
@@ -78,13 +79,16 @@ class Router extends SingletonPattern {
 			] );
 			remove_action( 'wp_head', 'feed_links_extra', 3 );
 			// Do authorization header.
+			if ( $do_auth_header ) {
+				$this->do_authorization_header();
+			}
+			// Render hijacked template.
 			do_action( 'template_redirect' );
 			wp_checkin_template( 'template-parts/header', $args );
 			wp_checkin_template( 'template-parts/' . $is_checkin, $args );
 			wp_checkin_template( 'template-parts/footer', $args );
 			exit;
 		}
-
 	}
 
 	/**
@@ -97,5 +101,14 @@ class Router extends SingletonPattern {
 		add_rewrite_rule( '^checkin/?$', 'index.php?checkin=archive', 'top' );
 		add_rewrite_rule( '^checkin/page/(\d+)/?$', 'index.php?checkin=archive&paged=$matches[1]', 'top' );
 		add_rewrite_rule( '^checkin/ticket/(\d+)/?$', 'index.php?checkin=single&p=$matches[1]', 'top' );
+	}
+
+	/**
+	 * Do authorization header.
+	 *
+	 * @return void
+	 */
+	public function do_authorization_header() {
+		// W.I.P
 	}
 }
