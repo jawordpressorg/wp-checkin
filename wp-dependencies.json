@@ -1,0 +1,100 @@
+[
+	{
+		"handle": "wp-checkin-attendance",
+		"path": "build/js/attendance.js",
+		"ext": "js",
+		"hash": "07aa1c429f03aa46c7ae0718ef846ebd",
+		"version": "0.0.0",
+		"deps": [
+			"react",
+			"wp-element",
+			"wp-api-fetch",
+			"wp-i18n"
+		],
+		"footer": true,
+		"media": "all"
+	},
+	{
+		"handle": "app",
+		"path": "build/js/app.js",
+		"ext": "js",
+		"hash": "2fd16c7048f14e01c4037e0e38b53278",
+		"version": "0.0.0",
+		"deps": [
+			"react",
+			"react-dom"
+		],
+		"footer": true,
+		"media": "all"
+	},
+	{
+		"handle": "ticket-page",
+		"path": "build/js/components/ticket-page.js",
+		"ext": "js",
+		"hash": "489657adac3aaece86f4231d05112402",
+		"version": "0.0.0",
+		"deps": [
+			"react"
+		],
+		"footer": true,
+		"media": "all"
+	},
+	{
+		"handle": "search-form",
+		"path": "build/js/components/search-form.js",
+		"ext": "js",
+		"hash": "a501149e9cdda5362489bb4771eac468",
+		"version": "0.0.0",
+		"deps": [
+			"react"
+		],
+		"footer": true,
+		"media": "all"
+	},
+	{
+		"handle": "search-box",
+		"path": "build/js/components/search-box.js",
+		"ext": "js",
+		"hash": "25427bfa5566cae8b0701dfc32164647",
+		"version": "0.0.0",
+		"deps": [
+			"react"
+		],
+		"footer": true,
+		"media": "all"
+	},
+	{
+		"handle": "loading",
+		"path": "build/js/components/loading.js",
+		"ext": "js",
+		"hash": "25427bfa5566cae8b0701dfc32164647",
+		"version": "0.0.0",
+		"deps": [
+			"react"
+		],
+		"footer": true,
+		"media": "all"
+	},
+	{
+		"handle": "helper",
+		"path": "build/js/components/helper.js",
+		"ext": "js",
+		"hash": "f5d387540235443141917d352abe4d71",
+		"version": "0.0.0",
+		"deps": [],
+		"footer": true,
+		"media": "all"
+	},
+	{
+		"handle": "wp-checkin",
+		"path": "build/css/style.css",
+		"ext": "css",
+		"hash": "9c08016b1df5a350dbf77eea93e01b74",
+		"version": "0.0.0",
+		"deps": [
+			"dashicons"
+		],
+		"footer": true,
+		"media": "all"
+	}
+]

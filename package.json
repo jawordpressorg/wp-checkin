@@ -22,6 +22,7 @@
 		"lint": "npm run lint:js && npm run lint:css",
 		"lint:css": "wp-scripts lint-style ./src/**/*.scss",
 		"lint:js": "eslint ./src/js",
+		"fix:js": "eslint --fix ./src/js",
 		"imagemin": "node ./bin/imagemin.mjs src/img build/img",
 		"format:js": "eslint --fix ./src/js",
 		"watch": "npm-watch"

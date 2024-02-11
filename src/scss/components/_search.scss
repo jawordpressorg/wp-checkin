@@ -1,33 +1,107 @@
-.backdrop{
+.wp-checkin-table {
+	width: 100%;
+	border-collapse: collapse;
 
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: rgba( 0, 0, 0, .7);
-  z-index: 10;
+	th,
+	td {
+		padding: 10px;
+		text-align: left;
+		border-top: 1px solid #eee;
+		border-bottom: 1px solid #eee;
+		font-size: 14px;
+	}
 
-  &-inner{
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba( 0, 0, 0, .8 );
-    max-width: 800px;
-    margin: 0 auto;
-    max-height: 90%;
-    overflow-y: auto;
-    position: relative;
-    padding-top: 20px;
-    h3{
-      font-size: 18px;
-      font-weight: bold;
-    }
-  }
+	thead {
+		th {
+			background-color: #f1f1f1;
+		}
+	}
 
-  &-close{
-    position: absolute;
-    right: 10px;
-    top: 10px;
-  }
+	small {
+		display: block;
+		word-break: break-all;
+	}
+}
+
+.wp-checkin-hidden {
+	@media screen and (max-width: 767px){
+		display: none;
+	}
+}
+
+.wp-checkin-row:nth-child(even) {
+	td {
+		background-color: #f1f1f1;
+	}
+}
+
+.wp-checkin-form {
+	padding-bottom: 20px;
+	text-align: center;
+
+	&-input {
+		min-width: 280px;
+		-webkit-appearance: none;
+		background-color: #fff;
+		border: 1px solid #ddd;
+		padding: 10px 15px;
+		border-radius: 50px;
+		font-size: 20px;
+	}
+
+	&-summary {
+		font-size: 14px;
+		font-weight: bold;
+		color: #666;
+	}
+}
+
+.wp-checkin-pagination {
+	padding: 40px 0;
+
+	ul {
+		display: flex;
+		justify-content: center;
+		gap: 10px;
+	}
+
+	li {
+		list-style: none;
+	}
+
+	a,
+	span {
+		display: inline-block;
+		width: 32px;
+		height: 32px;
+		line-height: 32px;
+		text-align: center;
+		border-radius: 3px;
+	}
+
+	span {
+		border: 1px solid $wp-blue-dark;
+		background-color: $wp-blue;
+		color: $invert-color;
+	}
+
+	a:link,
+	a:visited {
+		background-color: $invert-color;
+		border: 1px solid $wp-blue-dark;
+		color: $wp-blue-dark;
+		text-decoration: none;
+	}
+	a:hover,
+	a:active {
+		background-color: $wp-red;
+		border: 1px solid $wp-red;
+		color: $invert-color;
+		text-decoration: none;
+	}
+}
+
+.wp-checkin-not-found {
+	text-align: center;
+	font-weight: bold;
 }
