@@ -29,10 +29,11 @@ const AttendingButton = ( props ) => {
 				setLoading( false );
 				setAttending( response.checked_in );
 			} )
-			.catch( ( error ) => {
+			.catch( ( err ) => {
 				setLoading( false );
-				addError( error.message );
+				addError( err.message );
 			} );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 	return (
 		<>
@@ -44,7 +45,7 @@ const AttendingButton = ( props ) => {
 						method: 'POST',
 						data: {
 							auth_user,
-							auth_pass
+							auth_pass,
 
 						},
 					} )
@@ -52,9 +53,9 @@ const AttendingButton = ( props ) => {
 							setLoading( false );
 							setAttending( response.checked_in );
 						} )
-						.catch( ( error ) => {
+						.catch( ( err ) => {
 							setLoading( false );
-							addError( error.message );
+							addError( err.message );
 						} );
 				} else {
 					wp.apiFetch( {
@@ -65,11 +66,10 @@ const AttendingButton = ( props ) => {
 							setLoading( false );
 							setAttending( response.checked_in );
 						} )
-						.catch( ( error ) => {
+						.catch( ( err ) => {
 							setLoading( false );
-							addError( error.message );
+							addError( err.message );
 						} );
-
 				}
 			} }>
 				{ ! attending ? __( 'チェックイン', 'wp-checkin' ) : __( '取り消し', 'wp-checkin' ) }
@@ -87,9 +87,9 @@ if ( container ) {
 	const ticketId = container.dataset.ticketId;
 	if ( createRoot ) {
 		// React <= 18
-		createRoot( container ).render(<AttendingButton ticket-id={ ticketId } />);
+		createRoot( container ).render( <AttendingButton ticket-id={ ticketId } /> );
 	} else {
 		// React > 18
-		render(<AttendingButton ticket-id={ ticketId } />, container);
+		render( <AttendingButton ticket-id={ ticketId } />, container );
 	}
 }
