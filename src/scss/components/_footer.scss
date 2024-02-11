@@ -1,11 +1,26 @@
-footer.navbar{
-  display: block !important;
-  .container{
-    padding-top: 20px;
-  }
+
+
+.wp-checkin-footer {
+	padding: 80px 0;
+	background-color: $wp-blue;
+	color: $invert-color;
+
 }
 
-footer .fa-github{
-  font-size: 48px;
-  color: #ddd;
+.wp-checkin-copy {
+	margin: 0;
+	text-align: center;
+	font-size: 14px;
+
+	a:link,
+	a:visited {
+		color: $invert-color;
+		text-decoration: underline;
+	}
+
+	a:hover,
+	a:active {
+		color: $wp-red;
+		text-decoration: none;
+	}
 }

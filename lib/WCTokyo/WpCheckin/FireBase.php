@@ -7,6 +7,11 @@ use Hametuha\SingletonPattern\Singleton;
 use Kreait\Firebase\Factory;
 use Google\Cloud\Firestore\FirestoreClient;
 
+/**
+ * Firebase connector
+ *
+ * @deprecated
+ */
 class FireBase extends Singleton {
 
 	protected $credential_file_path = '';

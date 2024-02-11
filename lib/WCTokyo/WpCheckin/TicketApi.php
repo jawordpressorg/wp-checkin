@@ -10,6 +10,11 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Http\UploadedFile;
 
+/**
+ * チケットのAPI
+ *
+ * @deprecated
+ */
 class TicketApi extends Singleton {
 
 	/**
