@@ -63,6 +63,7 @@ class Tickets {
 			$tickets = array_values( array_filter( self::tickets( false ), function( $ticket ) use ( $query ) {
 				$not_found = false;
 				foreach ( $query as $index => $value ) {
+					// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 					if ( ! isset( $ticket[ $index ] ) || $ticket[ $index ] != $value ) {
 						$not_found = true;
 						break;
