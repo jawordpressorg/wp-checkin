@@ -52,13 +52,26 @@ class Tickets {
 	/**
 	 * Search ticket for the criteria
 	 *
-	 * @param $query
-	 * @param $page
+	 * @param string|array $query Search query or an array consists of column index and value.
+	 * @param int $page
 	 *
 	 * @return array{tickets:array, page:int, current:int, total:int}
 	 */
 	public static function search( $query = '', $page = 1 ) {
-		if ( $query ) {
+		if ( is_array( $query ) ) {
+			// This is index-column search.
+			$tickets = array_filter( self::tickets( false ), function( $ticket ) use ( $query ) {
+				$not_found = false;
+				foreach ( $query as $index => $value ) {
+					if ( ! isset( $ticket[ $index ] ) || $ticket[ $index ] != $value ) {
+						$not_found = true;
+						break;
+					}
+				}
+				return ! $not_found;
+			} );
+		} elseif ( $query ) {
+			// This is string search.
 			$tickets = array_filter( self::tickets( false ), function( $ticket ) use ( $query ) {
 				// Flatten array.
 				$str = implode( '', $ticket );

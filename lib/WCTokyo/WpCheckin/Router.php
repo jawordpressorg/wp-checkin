@@ -46,12 +46,15 @@ class Router extends SingletonPattern {
 		if ( ! get_query_var( 'checkin' ) || ! $wp_query->is_main_query() ) {
 			return;
 		}
-		if ( in_array( $is_checkin, [ 'archive', 'single' ], true ) ) {
+		if ( in_array( $is_checkin, [ 'archive', 'single', 'qr' ], true ) ) {
 			$do_auth_header = true;
 			wp_enqueue_style( 'wp-checkin' );
 			// Load template and exit.
 			$args = [];
 			switch ( $is_checkin ) {
+				case 'qr':
+					$this->render_qr();
+					break;
 				case 'archive':
 					$args = [
 						'title' => __( '登録済みのチケット', 'wp-checkin' ),
@@ -100,6 +103,7 @@ class Router extends SingletonPattern {
 	public function add_rewrite_rules() {
 		// Front archive.
 		add_rewrite_rule( '^checkin/?$', 'index.php?checkin=archive', 'top' );
+		add_rewrite_rule( '^checkin/qr.png/?$', 'index.php?checkin=qr', 'top' );
 		add_rewrite_rule( '^checkin/page/(\d+)/?$', 'index.php?checkin=archive&paged=$matches[1]', 'top' );
 		add_rewrite_rule( '^checkin/ticket/(\d+)/?$', 'index.php?checkin=single&p=$matches[1]', 'top' );
 	}
@@ -138,5 +142,40 @@ class Router extends SingletonPattern {
 				'tabindex' => 0,
 			],
 		] );
+	}
+
+	/**
+	 * Render QR code.
+	 *
+	 * @return void
+	 */
+	public function render_qr() {
+		$url    = home_url( 'checkin' );
+		$params = [
+			'f' => 2,
+			'g' => 3,
+			'e' => 4,
+		];
+		$query = [];
+		foreach ( $params as $name => $index ) {
+			$query[ $index ] = filter_input( INPUT_GET, $name );
+		}
+		$tickets = Tickets::search( $query );
+		if ( 1 === count( $tickets ) ) {
+			$url = home_url( 'checkin/' . $tickets[0][0] );
+		} elseif ( ! empty( $query[4] ) ) {
+			// Not found. Try to search with email.
+			$url = home_url( 'checkin/?s=' . rawurlencode( $query[4] ) );
+		}
+		// Generate URL with Google Chart API.
+		$api_url     = add_query_arg( [
+			'cht' => 'qr',
+			'chs' => '300x300',
+			'chl' => $url,
+		], 'https://chart.apis.google.com/chart' );
+		$content = file_get_contents( $api_url );
+		header( 'Content-Type: image/png' );
+		echo $content;
+		exit;
 	}
 }
