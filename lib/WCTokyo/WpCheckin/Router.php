@@ -152,8 +152,8 @@ class Router extends SingletonPattern {
 	public function render_qr() {
 		$url    = home_url( 'checkin' );
 		$params = [
-			'f' => 2,
-			'g' => 3,
+			'g' => 2,
+			'f' => 3,
 			'e' => 4,
 		];
 		$query = [];
@@ -161,8 +161,8 @@ class Router extends SingletonPattern {
 			$query[ $index ] = filter_input( INPUT_GET, $name );
 		}
 		$tickets = Tickets::search( $query );
-		if ( 1 === count( $tickets ) ) {
-			$url = home_url( 'checkin/' . $tickets[0][0] );
+		if ( 1 === $tickets['total'] ) {
+			$url = home_url( 'checkin/' . $tickets['tickets'][0][0] );
 		} elseif ( ! empty( $query[4] ) ) {
 			// Not found. Try to search with email.
 			$url = home_url( 'checkin/?s=' . rawurlencode( $query[4] ) );

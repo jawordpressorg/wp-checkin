@@ -60,7 +60,7 @@ class Tickets {
 	public static function search( $query = '', $page = 1 ) {
 		if ( is_array( $query ) ) {
 			// This is index-column search.
-			$tickets = array_filter( self::tickets( false ), function( $ticket ) use ( $query ) {
+			$tickets = array_values( array_filter( self::tickets( false ), function( $ticket ) use ( $query ) {
 				$not_found = false;
 				foreach ( $query as $index => $value ) {
 					if ( ! isset( $ticket[ $index ] ) || $ticket[ $index ] != $value ) {
@@ -69,14 +69,14 @@ class Tickets {
 					}
 				}
 				return ! $not_found;
-			} );
+			} ) );
 		} elseif ( $query ) {
 			// This is string search.
-			$tickets = array_filter( self::tickets( false ), function( $ticket ) use ( $query ) {
+			$tickets = array_values( array_filter( self::tickets( false ), function( $ticket ) use ( $query ) {
 				// Flatten array.
 				$str = implode( '', $ticket );
 				return str_contains( $str, $query );
-			} );
+			} ) );
 		} else {
 			$tickets = self::tickets( false );
 		}
