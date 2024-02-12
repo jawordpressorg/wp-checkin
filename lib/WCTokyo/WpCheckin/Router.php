@@ -21,6 +21,7 @@ class Router extends SingletonPattern {
 		add_action( 'init', [ $this, 'add_rewrite_rules' ] );
 		add_filter( 'query_vars', [ $this, 'add_query_vars' ] );
 		add_action( 'pre_get_posts', [ $this, 'pre_get_posts' ] );
+		add_action( 'admin_bar_menu', [ $this, 'admin_bar_menu' ], 300 );
 	}
 
 	/**
@@ -45,12 +46,15 @@ class Router extends SingletonPattern {
 		if ( ! get_query_var( 'checkin' ) || ! $wp_query->is_main_query() ) {
 			return;
 		}
-		if ( in_array( $is_checkin, [ 'archive', 'single' ], true ) ) {
+		if ( in_array( $is_checkin, [ 'archive', 'single', 'qr' ], true ) ) {
 			$do_auth_header = true;
 			wp_enqueue_style( 'wp-checkin' );
 			// Load template and exit.
 			$args = [];
 			switch ( $is_checkin ) {
+				case 'qr':
+					$this->render_qr();
+					break;
 				case 'archive':
 					$args = [
 						'title' => __( '登録済みのチケット', 'wp-checkin' ),
@@ -99,6 +103,7 @@ class Router extends SingletonPattern {
 	public function add_rewrite_rules() {
 		// Front archive.
 		add_rewrite_rule( '^checkin/?$', 'index.php?checkin=archive', 'top' );
+		add_rewrite_rule( '^checkin/qr.png/?$', 'index.php?checkin=qr', 'top' );
 		add_rewrite_rule( '^checkin/page/(\d+)/?$', 'index.php?checkin=archive&paged=$matches[1]', 'top' );
 		add_rewrite_rule( '^checkin/ticket/(\d+)/?$', 'index.php?checkin=single&p=$matches[1]', 'top' );
 	}
@@ -109,6 +114,68 @@ class Router extends SingletonPattern {
 	 * @return void
 	 */
 	public function do_authorization_header() {
-		// W.I.P
+		$user = get_option( 'wordcamp_auth_user' );
+		$pass = get_option( 'wordcamp_auth_pass' );
+		if ( ! isset( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] ) || $user !== $_SERVER['PHP_AUTH_USER'] || $pass !== $_SERVER['PHP_AUTH_PW'] ) {
+			header( 'WWW-Authenticate: Basic realm="Enter username and password."' );
+			header( 'Content-Type: text/plain; charset=utf-8' );
+			wp_die( __( 'このページを閲覧するためにはユーザー名とパスワードが必要です。', 'wp-checkin' ), get_status_header_desc( 401 ), [
+				'status'   => 401,
+				'response' => 401,
+			] );
+		}
+	}
+
+	/**
+	 * Custom admin bar.
+	 *
+	 * @param \WP_Admin_Bar $admin_bar Admin bar instance.
+	 * @return void
+	 */
+	public function admin_bar_menu( \WP_Admin_Bar &$admin_bar ) {
+		$admin_bar->add_node( [
+			'parent' => 'site-name',
+			'id'     => 'wp-checkin',
+			'title'  => __( 'チケット一覧ページ', 'wp=-checkin' ),
+			'href'   => home_url( 'checkin' ),
+			'meta'   => [
+				'tabindex' => 0,
+			],
+		] );
+	}
+
+	/**
+	 * Render QR code.
+	 *
+	 * @return void
+	 */
+	public function render_qr() {
+		$url    = home_url( 'checkin' );
+		$params = [
+			'g' => 2,
+			'f' => 3,
+			'e' => 4,
+		];
+		$query  = [];
+		foreach ( $params as $name => $index ) {
+			$query[ $index ] = filter_input( INPUT_GET, $name );
+		}
+		$tickets = Tickets::search( $query );
+		if ( 1 === $tickets['total'] ) {
+			$url = home_url( 'checkin/' . $tickets['tickets'][0][0] );
+		} elseif ( ! empty( $query[4] ) ) {
+			// Not found. Try to search with email.
+			$url = home_url( 'checkin/?s=' . rawurlencode( $query[4] ) );
+		}
+		// Generate URL with Google Chart API.
+		$api_url = add_query_arg( [
+			'cht' => 'qr',
+			'chs' => '300x300',
+			'chl' => $url,
+		], 'https://chart.apis.google.com/chart' );
+		$content = file_get_contents( $api_url );
+		header( 'Content-Type: image/png' );
+		echo $content;
+		exit;
 	}
 }

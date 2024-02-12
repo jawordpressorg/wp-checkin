@@ -52,18 +52,32 @@ class Tickets {
 	/**
 	 * Search ticket for the criteria
 	 *
-	 * @param $query
-	 * @param $page
+	 * @param string|array $query Search query or an array consists of column index and value.
+	 * @param int $page
 	 *
 	 * @return array{tickets:array, page:int, current:int, total:int}
 	 */
 	public static function search( $query = '', $page = 1 ) {
-		if ( $query ) {
-			$tickets = array_filter( self::tickets( false ), function( $ticket ) use ( $query ) {
+		if ( is_array( $query ) ) {
+			// This is index-column search.
+			$tickets = array_values( array_filter( self::tickets( false ), function( $ticket ) use ( $query ) {
+				$not_found = false;
+				foreach ( $query as $index => $value ) {
+					// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+					if ( ! isset( $ticket[ $index ] ) || $ticket[ $index ] != $value ) {
+						$not_found = true;
+						break;
+					}
+				}
+				return ! $not_found;
+			} ) );
+		} elseif ( $query ) {
+			// This is string search.
+			$tickets = array_values( array_filter( self::tickets( false ), function( $ticket ) use ( $query ) {
 				// Flatten array.
 				$str = implode( '', $ticket );
 				return str_contains( $str, $query );
-			} );
+			} ) );
 		} else {
 			$tickets = self::tickets( false );
 		}
@@ -98,14 +112,13 @@ class Tickets {
 			return [];
 		}
 		$meta       = [];
-		$prohibited = [
+		$prohibited = apply_filters( 'wp_checking_ignored_column_index', [
 			0,
 			1,
 			2,
 			3, // ID, 名前、メール
 			8, // トランザクションID
-
-		];
+		] );
 		foreach ( $tickets[0] as $index => $label ) {
 			// phpcs:ignore WordPress.PHP.StrictInArray.FoundNonStrictFalse
 			if ( ! in_array( $index, $prohibited, false ) ) {
