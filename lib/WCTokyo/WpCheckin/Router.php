@@ -21,6 +21,7 @@ class Router extends SingletonPattern {
 		add_action( 'init', [ $this, 'add_rewrite_rules' ] );
 		add_filter( 'query_vars', [ $this, 'add_query_vars' ] );
 		add_action( 'pre_get_posts', [ $this, 'pre_get_posts' ] );
+		add_action( 'admin_bar_menu', [ $this, 'admin_bar_menu' ], 300 );
 	}
 
 	/**
@@ -109,6 +110,33 @@ class Router extends SingletonPattern {
 	 * @return void
 	 */
 	public function do_authorization_header() {
-		// W.I.P
+		$user = get_option( 'wordcamp_auth_user' );
+		$pass = get_option( 'wordcamp_auth_pass' );
+		if ( ! isset( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] ) || $user !== $_SERVER['PHP_AUTH_USER'] || $pass !== $_SERVER['PHP_AUTH_PW'] ) {
+			header( 'WWW-Authenticate: Basic realm="Enter username and password."' );
+			header( 'Content-Type: text/plain; charset=utf-8' );
+			wp_die( __( 'このページを閲覧するためにはユーザー名とパスワードが必要です。', 'wp-checkin' ), get_status_header_desc( 401 ), [
+				'status'   => 401,
+				'response' => 401,
+			] );
+		}
+	}
+
+	/**
+	 * Custom admin bar.
+	 *
+	 * @param \WP_Admin_Bar $admin_bar Admin bar instance.
+	 * @return void
+	 */
+	public function admin_bar_menu( \WP_Admin_Bar &$admin_bar ) {
+		$admin_bar->add_node( [
+			'parent' => 'site-name',
+			'id'     => 'wp-checkin',
+			'title'  => __( 'チケット一覧ページ', 'wp=-checkin' ),
+			'href'   => home_url( 'checkin' ),
+			'meta'   => [
+				'tabindex' => 0,
+			],
+		] );
 	}
 }

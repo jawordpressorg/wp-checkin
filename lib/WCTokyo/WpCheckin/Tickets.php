@@ -98,14 +98,13 @@ class Tickets {
 			return [];
 		}
 		$meta       = [];
-		$prohibited = [
+		$prohibited = apply_filters( 'wp_checking_ignored_column_index', [
 			0,
 			1,
 			2,
 			3, // ID, 名前、メール
 			8, // トランザクションID
-
-		];
+		] );
 		foreach ( $tickets[0] as $index => $label ) {
 			// phpcs:ignore WordPress.PHP.StrictInArray.FoundNonStrictFalse
 			if ( ! in_array( $index, $prohibited, false ) ) {

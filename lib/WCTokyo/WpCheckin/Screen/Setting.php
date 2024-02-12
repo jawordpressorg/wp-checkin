@@ -34,7 +34,7 @@ class Setting extends SingletonPattern {
 			?>
 			<div class="wrap">
 				<h1><?php esc_html_e( 'WordCamp チェックイン設定', 'wp-checkin' ); ?></h1>
-				<form method="post" action="options.php">
+				<form method="post" action="<?php echo admin_url( 'options.php' ); ?>">
 					<?php
 					settings_fields( 'wp-checkin' );
 					do_settings_sections( 'wp-checkin' );
