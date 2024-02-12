@@ -156,7 +156,7 @@ class Router extends SingletonPattern {
 			'f' => 3,
 			'e' => 4,
 		];
-		$query = [];
+		$query  = [];
 		foreach ( $params as $name => $index ) {
 			$query[ $index ] = filter_input( INPUT_GET, $name );
 		}
@@ -168,7 +168,7 @@ class Router extends SingletonPattern {
 			$url = home_url( 'checkin/?s=' . rawurlencode( $query[4] ) );
 		}
 		// Generate URL with Google Chart API.
-		$api_url     = add_query_arg( [
+		$api_url = add_query_arg( [
 			'cht' => 'qr',
 			'chs' => '300x300',
 			'chl' => $url,

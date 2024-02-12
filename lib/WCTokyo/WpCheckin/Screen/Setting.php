@@ -3,7 +3,9 @@
 namespace WCTokyo\WpCheckin\Screen;
 
 
+use PHP_CodeSniffer\Generators\HTML;
 use WCTokyo\WpCheckin\Pattern\SingletonPattern;
+use WCTokyo\WpCheckin\Tickets;
 
 /**
  * Create setting screen.
@@ -22,6 +24,7 @@ class Setting extends SingletonPattern {
 		add_action( 'admin_init', [ $this, 'register_option' ] );
 		add_action( 'admin_menu', [ $this, 'add_menu' ] );
 		add_action( 'wp_ajax_' . $this->ajax_action, [ $this, 'upload_csv' ] );
+		add_action( 'admin_notices', [ $this, 'notification' ] );
 	}
 
 	/**
@@ -43,6 +46,21 @@ class Setting extends SingletonPattern {
 				</form>
 				<h2><?php esc_html_e( 'チケット情報', 'wp-checkin' ); ?></h2>
 				<?php $this->csv_form(); ?>
+				<h2><?php esc_html_e( 'HTMLタグ', 'wp-checkin' ); ?></h2>
+				<p>
+					<?php esc_html_e( 'WordCampサイトにおいてチケット購入者に送るメールに以下のHTMLタグを入力してください。チケットのチェックインページを開くQRコードが表示されます。', 'wp-checkin' ); ?>
+				</p>
+				<?php
+				$url  = add_query_arg( [
+					'g' => '[first_name]',
+					'f' => '[last_name]',
+					'e' => '[email]',
+				], home_url( '/checkin/qr.png' ) );
+				$text = <<<HTML
+<img src="{$url}" alt="" width="300" height="300" />
+HTML;
+				?>
+				<textarea readonly onclick="this.select();" style="width: 100%; box-sizing: border-box"><?php echo esc_textarea( $text ); ?></textarea>
 			</div>
 			<?php
 		} );
@@ -173,5 +191,56 @@ class Setting extends SingletonPattern {
 			], admin_url( 'options-general.php' ) ) );
 			exit;
 		}
+	}
+
+	/**
+	 * メールアドレスなどについての注意書きを出す
+	 *
+	 * @return void
+	 */
+	public function notification() {
+		$success   = true;
+		$messages  = [];
+		$admin_ulr = admin_url( 'options-general.php?page=wp-checkin' );
+		// Site setting
+		$url = get_option( 'wordcamp_site_url' );
+		if ( $url ) {
+			// translators: %1$s is URL.
+			$messages[] = sprintf( __( 'WordCampサイトは<a href="%1$s">%1$s</a>です。', 'wp-checkin' ), esc_url( $url ) );
+		} else {
+			$success = false;
+			// translators: %s is URL.
+			$messages[] = sprintf( __( 'WordCampサイトのURLが<a href="%s">設定</a>されていません。', 'wp-checkin' ), $admin_ulr );
+		}
+		// Basic auth setting.
+		$user = get_option( 'wordcamp_auth_user' );
+		$pass = get_option( 'wordcamp_auth_pass' );
+		if ( $user && $pass ) {
+			$messages[] = __( 'チケットページはパスワードで保護されています。', 'wp-checkin' );
+		} else {
+			$success = false;
+			// translators: %s is URL.
+			$messages[] = sprintf( __( 'チケットページがパスワード保護されていません。パスワードを<a href="%s">設定</a>してください。', 'wp-checkin' ), $admin_ulr );
+		}
+		// Ticket imported.
+		$total = count( Tickets::tickets( false ) );
+		if ( 1 < $total ) {
+			// translators: %d is ticket count.
+			$messages[] = sprintf( __( '%d件のチケット情報が登録されています。', 'wp-checkin' ), $total );
+		} else {
+			$success = false;
+			// translators: %s is URL.
+			$messages[] = sprintf( __( 'チケットのCSが登録されていません。パスワードを<a href="%s">設定</a>してください。', 'wp-checkin' ), $admin_ulr );
+		}
+		// Output message.
+		?>
+		<div class="notice notice-<?php echo $success ? 'success' : 'error'; ?>">
+			<ol>
+				<?php foreach ( $messages as $message ) : ?>
+					<li><?php echo wp_kses_post( $message ); ?></li>
+				<?php endforeach; ?>
+			</ol>
+		</div>
+		<?php
 	}
 }
