@@ -78,7 +78,7 @@ jobs:
         with:
           flags: '-rptv --checksum --delete'
           options: '--exclude-from=.distignore'
-          ssh_options: ''
+          ssh_options: '-p 2222'
           src: './'
           dest: "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/home/users/2/${{ secrets.DEPLOY_USER }}/web/wp-checkin/wp-content/plugins/${{ github.event.repository.name }}/"
 
