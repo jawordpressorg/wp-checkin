@@ -72,12 +72,22 @@ class Tickets {
 				return ! $not_found;
 			} ) );
 		} elseif ( $query ) {
-			// This is string search.
-			$tickets = array_values( array_filter( self::tickets( false ), function( $ticket ) use ( $query ) {
-				// Flatten array.
-				$str = implode( '', $ticket );
-				return str_contains( $str, $query );
-			} ) );
+			$query   = array_values( array_filter( preg_split( '/[ 　+]/u', $query ) ) );
+			$tickets = self::tickets( false );
+			if ( ! empty( $query ) ) {
+				// This is string search.
+				$tickets = array_values( array_filter( $tickets, function( $ticket ) use ( $query ) {
+					// Flatten array.
+					$str     = implode( '', $ticket );
+					$matched = 0;
+					foreach ( $query as $q ) {
+						if ( str_contains( $str, $q ) ) {
+							$matched++;
+						}
+					}
+					return count( $query ) === $matched;
+				} ) );
+			}
 		} else {
 			$tickets = self::tickets( false );
 		}
