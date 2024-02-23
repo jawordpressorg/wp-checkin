@@ -162,7 +162,7 @@ class Router extends SingletonPattern {
 		}
 		$tickets = Tickets::search( $query );
 		if ( 1 === $tickets['total'] ) {
-			$url = home_url( 'checkin/' . $tickets['tickets'][0][0] );
+			$url = home_url( 'checkin/ticket/' . $tickets['tickets'][0][0] );
 		} elseif ( ! empty( $query[4] ) ) {
 			// Not found. Try to search with email.
 			$url = home_url( 'checkin/?s=' . rawurlencode( $query[4] ) );
