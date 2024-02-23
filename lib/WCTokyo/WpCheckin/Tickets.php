@@ -72,13 +72,13 @@ class Tickets {
 				return ! $not_found;
 			} ) );
 		} elseif ( $query ) {
-			$query = array_values( array_filter( preg_split( '/[ 　+]/u', $query ) ) );
+			$query   = array_values( array_filter( preg_split( '/[ 　+]/u', $query ) ) );
 			$tickets = self::tickets( false );
 			if ( ! empty( $query ) ) {
 				// This is string search.
 				$tickets = array_values( array_filter( $tickets, function( $ticket ) use ( $query ) {
 					// Flatten array.
-					$str = implode( '', $ticket );
+					$str     = implode( '', $ticket );
 					$matched = 0;
 					foreach ( $query as $q ) {
 						if ( str_contains( $str, $q ) ) {
