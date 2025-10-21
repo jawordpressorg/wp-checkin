@@ -49,10 +49,13 @@ class Bootstrap extends SingletonPattern {
 			$deps   = $dependency['deps'];
 			switch ( $dependency['ext'] ) {
 				case 'js':
-					wp_register_script( $handle, $url, $deps, $hash, [
+					$footer = [
 						'in_footer' => $dependency['footer'],
-						'strategy'  => 'defer',
-					] );
+					];
+					if ( in_array( $dependency['strategy'], [ 'defer', 'async' ], true ) ) {
+						$footer['strategy'] = $dependency['strategy'];
+					}
+					wp_register_script( $handle, $url, $deps, $hash, $footer );
 					break;
 				case 'css':
 					wp_register_style( $handle, $url, $deps, $hash, $dependency['media'] );

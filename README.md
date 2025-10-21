@@ -1,18 +1,32 @@
 # wp-checkin
 
-Version: nightly
+Tags: wordcamp
+Contributors: Takahashi_Fumiki
+Tested up to: 6.8  
+Stable Tag: nightly  
+License: GPLv3 or later  
+License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
-A check-in helper for [WordCamp Tokyo 2019](https://2019.tokyo.wordcamp.org)
+A check-in helper for WordCamp.
 
-## Install
+## Description
 
-You need PHP gRPC extension since wp-checkin uses [google/cloud-firestore](https://firebase-php.readthedocs.io/en/stable/cloud-firestore.html#getting-started). Install it using [this instruction](https://github.com/grpc/grpc/tree/master/src/php).
+WordCampサイトには「通知」という機能があり、チケット購入者にメールを送信することができます。
+このプラグインから提供される画像タグを通知の本文内に入れると、QRコードとして表示され、スタッフはその画像を読み取ることで、チケットの内容を表示できます。
+[WordCamp Tokyo 2019](https://2019.tokyo.wordcamp.org) における受付フロー改善のための仕組みとして導入されました。
 
-```
-sudo pecl install grpc
-```
+[![WP Checkin](https://img.youtube.com/vi/-R4gbTd8EFI/maxresdefault.jpg)](https://www.youtube.com/watch?v=-R4gbTd8EFI)
 
-Clone `wp-checkin` repository then install `composer` and `npm`.
+かつてはPHP+Slim Frameworkで動作していましたが、WordPressプラグインとして書き直しました。
+
+## Installation
+
+GitHubの[release]()にビルド済みのzipファイルがあります。このファイルをダウンロードし、プラグイン > 新規追加からアップロードしてください。
+
+## Development
+
+このリポジトリをクローンし、 `composer` および `npm` をインストールしてください。
+必要なバージョンは `package.json` および `composer.json` に記載されています。
 
 ```
 git clone git@github.com:wct2019/wp-checkin.git
@@ -21,96 +35,12 @@ composer install
 npm install
 ```
 
-- Pulbic direcotry is `public`.
+- `npm start` を実行するとローカルのWordPressが起動します。
+- `npm run watch` で静的ファイルの監視がスタートします。
+- `composer lint` でPHPの構文チェックを行います。
 
-### Acknowledgement
-
-wp-checkin uses the following libraries. Thanks!
-
-- Slim
-- React
-- FontAwesome
-- Twitter Bootstrap
-
-## Development
-
-### 1. Place authentication file in root
-
-To connect Firebase, you will need an authentication file. Place `wordcamptokyo2019app-firebase-key.json` file and place it in the root of your repository.
-
-### 2. Start a local server
-
-- `npm start` to start building static files.
-- `npm run watch` to start monitoring.
-- `composer start` to start a local server at `localhost:8080`. This will connect with live database so handle with care.
-
-### 3. Fixing Issues
-
-1. Folk this repository.
-2. Create a branch (e.g. `bugfix/what-you-fixed`) and send a pull request to `master`.
-
-## Live Site
-
-- Our live site is [2019.tokyo.wp-checkin.com](https://2019.tokyo.wp-checkin.com).
-- The site has Basic access authentication.
-- Commit to `master` branch will be automatically deployed to the live site.
+変更はGitHubリポジトリにプルリクエストとして送ってください。
 
 ## License
 
 GPL 3.0 or later.
-
----
-## インストール
-
-PHPのgRPC拡張必須です。[google/cloud-firestore](https://firebase-php.readthedocs.io/en/stable/cloud-firestore.html#getting-started)を使っているためです。インストール方法は[こちら](https://github.com/grpc/grpc/tree/master/src/php)をご覧ください。
-
-```
-sudo pecl install grpc
-```
-
-このリポジトリをクローンし、 `composer` および `npm` をインストールしてください。
-
-```
-git clone git@github.com:wct2019/wp-checkin.git
-cd wp-checkin
-composer install
-npm install
-```
-
-- `public` 以下が公開用ディレクトリになります。
-
-### Acknowledgement
-
-以下のライブラリを利用しています。ありがとうございます。
-
-- Slim
-- React
-- FontAwesome
-- Twitter Bootstrap
-
-## 開発
-
-### 1. 認証ファイルを用意する
-
-Firebaseとの連携のため、認証ファイルが必要です。 `wordcamptokyo2019app-firebase-key.json` というファイルを入手し、リポジトリのルートに入れてください。
-
-### 2. ローカルサーバーをスタートする
-
-- `npm start` で静的ファイルのビルドが開始されます。
-- `npm run watch` で静的ファイルの監視がスタートします。
-- `composer start` で `localhost:8080` にローカルサーバーが立ち上がります。これは本番データベースと接続するので、動作には注意してください。
-
-### 3. 修正を送る
-
-1. このリポジトリをフォークしてください。
-2. `bugfix/what-you-fixed` といった形で `bugfix/修正した内容` のブランチを切り、masterブランチに対してプルリクエストを送ってください。
-
-## 本番サイト
-
-- [2019.tokyo.wp-checkin.com](https://2019.tokyo.wp-checkin.com) です。
-- Basic認証がかかっています。
-- masterブランチにコミットすると、勝手にデプロイされます。
-
-## ライセンス
-
-GPL 3.0またはそれ以降。
