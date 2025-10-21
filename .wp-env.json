@@ -1,11 +1,16 @@
 {
 	"core": null,
+	"phpVersion": "8.2",
 	"plugins": [
 		".",
 		"https://downloads.wordpress.org/plugin/query-monitor.latest-stable.zip"
 	],
-	"phpVersion": "8.2",
 	"themes": [
 		"https://downloads.wordpress.org/theme/twentytwentyfour.latest-stable.zip"
-	]
+	],
+	"config": {
+		"WP_DEBUG": true,
+		"WP_DEBUG_LOG": true,
+		"WP_DEBUG_DISPLAY": false
+	}
 }

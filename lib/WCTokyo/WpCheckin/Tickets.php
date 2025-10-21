@@ -28,7 +28,7 @@ class Tickets {
 	 */
 	public static function filter( $value, $index ) {
 		foreach ( self::tickets( false ) as $ticket ) {
-			// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+			// phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual
 			if ( isset( $ticket[ $index ] ) && $ticket[ $index ] == $value ) {
 				return $ticket;
 			}
@@ -60,10 +60,10 @@ class Tickets {
 	public static function search( $query = '', $page = 1 ) {
 		if ( is_array( $query ) ) {
 			// This is index-column search.
-			$tickets = array_values( array_filter( self::tickets( false ), function( $ticket ) use ( $query ) {
+			$tickets = array_values( array_filter( self::tickets( false ), function ( $ticket ) use ( $query ) {
 				$not_found = false;
 				foreach ( $query as $index => $value ) {
-					// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+					// phpcs:ignore Universal.Operators.StrictComparisons.LooseNotEqual
 					if ( ! isset( $ticket[ $index ] ) || $ticket[ $index ] != $value ) {
 						$not_found = true;
 						break;
@@ -76,7 +76,7 @@ class Tickets {
 			$tickets = self::tickets( false );
 			if ( ! empty( $query ) ) {
 				// This is string search.
-				$tickets = array_values( array_filter( $tickets, function( $ticket ) use ( $query ) {
+				$tickets = array_values( array_filter( $tickets, function ( $ticket ) use ( $query ) {
 					// Flatten array.
 					$str     = implode( '', $ticket );
 					$matched = 0;
@@ -99,7 +99,7 @@ class Tickets {
 			if ( $index >= $offset && $index < $offset + $per_page ) {
 				$result[] = $ticket;
 			}
-			$index++;
+			++$index;
 		}
 		$total = count( $tickets );
 		return [

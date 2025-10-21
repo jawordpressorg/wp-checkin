@@ -53,21 +53,21 @@ class RestApi extends SingletonPattern {
 				'ticket_id' => [
 					'required'          => true,
 					'type'              => 'integer',
-					'validate_callback' => function( $param ) {
+					'validate_callback' => function ( $param ) {
 						return is_numeric( $param );
 					},
 				],
 				'auth_user' => [
 					'required'          => true,
 					'type'              => 'string',
-					'validate_callback' => function( $param ) {
+					'validate_callback' => function ( $param ) {
 						return get_option( 'wordcamp_auth_user' ) === $param;
 					},
 				],
 				'auth_pass' => [
 					'required'          => true,
 					'type'              => 'string',
-					'validate_callback' => function( $param ) {
+					'validate_callback' => function ( $param ) {
 						return get_option( 'wordcamp_auth_pass' ) === $param;
 					},
 				],

@@ -3,77 +3,88 @@
 		"handle": "wp-checkin-attendance",
 		"path": "build/js/attendance.js",
 		"ext": "js",
-		"hash": "07aa1c429f03aa46c7ae0718ef846ebd",
+		"hash": "5ca760e0f417095e9a88fcec92456a31",
 		"version": "0.0.0",
 		"deps": [
-			"react",
 			"wp-element",
 			"wp-api-fetch",
-			"wp-i18n"
+			"wp-i18n",
+			"react-jsx-runtime"
 		],
 		"footer": true,
-		"media": "all"
+		"media": "all",
+		"strategy": ""
 	},
 	{
 		"handle": "app",
 		"path": "build/js/app.js",
 		"ext": "js",
-		"hash": "2fd16c7048f14e01c4037e0e38b53278",
+		"hash": "9d559e0403093f6290d6c02033ecc404",
 		"version": "0.0.0",
 		"deps": [
 			"react",
-			"react-dom"
+			"react-dom",
+			"react-jsx-runtime"
 		],
 		"footer": true,
-		"media": "all"
+		"media": "all",
+		"strategy": ""
 	},
 	{
 		"handle": "ticket-page",
 		"path": "build/js/components/ticket-page.js",
 		"ext": "js",
-		"hash": "489657adac3aaece86f4231d05112402",
+		"hash": "f29a5555b60aba91985ded57a73abb0f",
 		"version": "0.0.0",
 		"deps": [
-			"react"
+			"react",
+			"react-jsx-runtime"
 		],
 		"footer": true,
-		"media": "all"
+		"media": "all",
+		"strategy": ""
 	},
 	{
 		"handle": "search-form",
 		"path": "build/js/components/search-form.js",
 		"ext": "js",
-		"hash": "a501149e9cdda5362489bb4771eac468",
+		"hash": "2af16fd808a9504c9e1c490ea8b52765",
 		"version": "0.0.0",
 		"deps": [
-			"react"
+			"react",
+			"react-jsx-runtime"
 		],
 		"footer": true,
-		"media": "all"
+		"media": "all",
+		"strategy": ""
 	},
 	{
 		"handle": "search-box",
 		"path": "build/js/components/search-box.js",
 		"ext": "js",
-		"hash": "25427bfa5566cae8b0701dfc32164647",
+		"hash": "91928f05920ab92926fbb83320a17836",
 		"version": "0.0.0",
 		"deps": [
-			"react"
+			"react",
+			"react-jsx-runtime"
 		],
 		"footer": true,
-		"media": "all"
+		"media": "all",
+		"strategy": ""
 	},
 	{
 		"handle": "loading",
 		"path": "build/js/components/loading.js",
 		"ext": "js",
-		"hash": "25427bfa5566cae8b0701dfc32164647",
+		"hash": "91928f05920ab92926fbb83320a17836",
 		"version": "0.0.0",
 		"deps": [
-			"react"
+			"react",
+			"react-jsx-runtime"
 		],
 		"footer": true,
-		"media": "all"
+		"media": "all",
+		"strategy": ""
 	},
 	{
 		"handle": "helper",
@@ -83,7 +94,8 @@
 		"version": "0.0.0",
 		"deps": [],
 		"footer": true,
-		"media": "all"
+		"media": "all",
+		"strategy": ""
 	},
 	{
 		"handle": "wp-checkin",
@@ -95,6 +107,7 @@
 			"dashicons"
 		],
 		"footer": true,
-		"media": "all"
+		"media": "all",
+		"strategy": ""
 	}
 ]

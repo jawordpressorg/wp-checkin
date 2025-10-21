@@ -33,7 +33,7 @@ class Setting extends SingletonPattern {
 	 * @return void
 	 */
 	public function add_menu() {
-		add_options_page( __( 'WordCamp チェックイン', 'wp-checkin' ), __( 'チェックイン', 'wp-checkin' ), 'manage_options', 'wp-checkin', function() {
+		add_options_page( __( 'WordCamp チェックイン', 'wp-checkin' ), __( 'チェックイン', 'wp-checkin' ), 'manage_options', 'wp-checkin', function () {
 			?>
 			<div class="wrap">
 				<h1><?php esc_html_e( 'WordCamp チェックイン設定', 'wp-checkin' ); ?></h1>
@@ -78,7 +78,7 @@ HTML;
 		add_settings_section(
 			'wp_checkin_settings',
 			__( 'WordCamp チェックイン設定', 'wp-checkin' ),
-			function() {
+			function () {
 				printf( '<p>%s</p>', esc_html__( 'WordCampのチェックインシステムに必要な設定を行います。', 'wp-checkin' ) );
 			},
 			'wp-checkin'
@@ -89,7 +89,7 @@ HTML;
 			[ 'wordcamp_auth_user', __( '共有基本認証ユーザー名', 'wp-checkin' ), 'text' ],
 			[ 'wordcamp_auth_pass', __( '共有基本認証パスワード', 'wp-checkin' ), 'password' ],
 		] as list( $option_name, $label, $type ) ) {
-			add_settings_field( $option_name, $label, function() use ( $option_name, $type ) {
+			add_settings_field( $option_name, $label, function () use ( $option_name, $type ) {
 				$value = get_option( $option_name );
 				printf( '<input type="%s" name="%s" value="%s" class="regular-text">', esc_attr( $type ), esc_attr( $option_name ), esc_attr( $value ) );
 			}, 'wp-checkin', 'wp_checkin_settings' );
