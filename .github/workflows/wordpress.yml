@@ -1,15 +1,13 @@
 name: Deploy Plugin
 
 on:
-  push:
-    branches:
-      - master
+  release:
+    types: [published]
 
 jobs:
 
   release:
     name: Deploy Production Server
-    if: contains(github.ref, 'tags/')
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -43,7 +41,7 @@ jobs:
       - name: Versioning
         uses: tarosky/workflows/actions/versioning@main
         with:
-          version: ${{ github.ref }}
+          version: ${{ github.event.release.tag_name }}
           files: wp-checkin.php, readme.txt
 
       - name: Deploy to Production Server
@@ -65,25 +63,14 @@ jobs:
         uses: tarosky/workflows/actions/distignore@main
 
       - name: Zip Archive
-        run: zip -r ${{ github.event.repository.name }}.zip ./
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+        run: |
+          mkdir ${{ github.event.repository.name }}
+          rsync -av --exclude=${{ github.event.repository.name }} --exclude=.git ./ ./${{ github.event.repository.name }}/
+          zip -r ./${{ github.event.repository.name }}.zip ./${{ github.event.repository.name }}
 
       - name: Upload release asset
-        uses: actions/upload-release-asset@v1.0.1
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ github.event.repository.name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/${{ github.event.repository.name }}.zip
-          asset_name: ${{ github.event.repository.name }}.zip
-          asset_content_type: application/zip
