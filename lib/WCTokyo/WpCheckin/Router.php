@@ -167,15 +167,16 @@ class Router extends SingletonPattern {
 			// Not found. Try to search with email.
 			$url = home_url( 'checkin/?s=' . rawurlencode( $query[4] ) );
 		}
-		// Generate URL with Google Chart API.
-		$api_url = add_query_arg( [
-			'cht' => 'qr',
-			'chs' => '300x300',
-			'chl' => $url,
-		], 'https://chart.apis.google.com/chart' );
-		$content = file_get_contents( $api_url );
+		// Generate QR code with chillerlan/php-qrcode.
+		$options = new \chillerlan\QRCode\QROptions( [
+			'outputType'   => \chillerlan\QRCode\Output\QROutputInterface::GDIMAGE_PNG,
+			'outputBase64' => false,
+			'eccLevel'     => \chillerlan\QRCode\Common\EccLevel::L,
+			'scale'        => 10,
+		] );
+		$qrcode  = new \chillerlan\QRCode\QRCode( $options );
 		header( 'Content-Type: image/png' );
-		echo $content;
+		echo $qrcode->render( $url );
 		exit;
 	}
 }

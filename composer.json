@@ -11,14 +11,16 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=7.4"
+        "php": ">=8.2",
+        "chillerlan/php-qrcode": "^5.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.0",
-        "wp-coding-standards/wpcs": "^2.0",
-        "phpcompatibility/php-compatibility": "^9.3",
+        "wp-coding-standards/wpcs": "^3.0",
+        "phpcompatibility/php-compatibility": "dev-develop",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
     },
+    "prefer-stable": true,
     "autoload": {
         "psr-0": {
             "WCTokyo\\WpCheckin": "lib"

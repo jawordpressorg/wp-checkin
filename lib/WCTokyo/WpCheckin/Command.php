@@ -65,4 +65,46 @@ class Command extends \WP_CLI_Command {
 		}
 		return $response;
 	}
+
+	/**
+	 * ユーザーのQRコードに表示されるURLを出力。デバッグ用
+	 *
+	 * @synopsis <id>
+	 * @param array $args
+	 * @return void
+	 */
+	public function qr( $args ) {
+		list( $id ) = $args;
+		$ticket     = Tickets::get( $id );
+		if ( ! $ticket ) {
+			\WP_CLI::error( '該当するチケットはありません。' );
+		}
+		$url = add_query_arg( [
+			'g' => rawurlencode( $ticket[3] ),
+			'f' => rawurlencode( $ticket[2] ),
+			'e' => rawurlencode( $ticket[4] ),
+		], home_url( '/checkin/qr.png' ) );
+		\WP_CLI::success( 'URL: ' . $url );
+	}
+
+	/**
+	 * CSVの内容を一覧にして表示する（デバッグ用）
+	 *
+	 * @return void
+	 */
+	public function users() {
+		$tickets = Tickets::tickets( true );
+		if ( empty( $tickets ) ) {
+			\WP_CLI::error( 'CSVが無効です' );
+		}
+		$table = new Table();
+		foreach ( $tickets as $index => $row ) {
+			if ( ! $index ) {
+				$table->setHeaders( $row );
+			} else {
+				$table->addRow( $row );
+			}
+		}
+		$table->display();
+	}
 }

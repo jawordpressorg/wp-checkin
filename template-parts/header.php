@@ -1,6 +1,6 @@
 <?php
 /**
- * Header template for our theme
+ * Header template for wp-checkin
  *
  * @var array $args Arguments.
  */

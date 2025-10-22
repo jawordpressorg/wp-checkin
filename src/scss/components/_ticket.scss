@@ -1,5 +1,6 @@
 .wp-checkin-return {
 	margin: 20px 0;
+	padding: 0 15px;
 
 	a {
 		display: inline-block;
@@ -34,16 +35,23 @@
 	text-align: center;
 	margin: 20px 0;
 
+	.avatar {
+		width: 96px;
+		height: 96px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
 	h2 {
 		margin: 20px 0;
 		font-size: 18px;
-		font-weight: bold;
+		font-weight: 700;
 	}
 
 	small {
 		display: block;
 		color: #666;
-		font-weight: bold;
+		font-weight: 700;
 		font-size: 16px;
 		margin: 20px 0;
 	}
@@ -60,10 +68,25 @@
 			border-color: $wp-red;
 			color: $invert-color;
 		}
+	}
 
-		+p {
-			color: green;
+	&-status {
+		font-size: 18px;
+		color: $wp-success;
+
+		.dashicons {
+			vertical-align: middle;
 		}
+	}
+}
+
+.wp-checkin-items {
+	ol {
+		margin: 10px auto 15px;
+		padding-bottom: 15px;
+		border-bottom: 1px solid #eee;
+		max-width: 320px;
+		text-align: left;
 	}
 }
 
@@ -72,6 +95,13 @@
 	table-layout: auto;
 	border-collapse: collapse;
 	width: 100%;
+
+	caption {
+		padding: 10px;
+		font-weight: 700;
+		font-size: 1.2em;
+		text-align: center;
+	}
 
 	th,
 	td {

@@ -11,6 +11,8 @@ trait Request {
 	/**
 	 * Send Request to REST API.
 	 *
+	 * @todo WordCamp.orgのREST APIが整備されたら、ここでデータを取りに行ける
+	 *
 	 * @param string $path   Request path.
 	 * @param string $method Request method[ 'GET', 'POST', 'PUT', 'DELETE', 'HEAD' ].
 	 * @param array  $data   Query param for GET, body for POST.

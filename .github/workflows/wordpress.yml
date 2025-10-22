@@ -1,43 +1,17 @@
 name: Deploy Plugin
 
 on:
-  push:
-    branches:
-      - master
-    tags:
-      - '*'
-  pull_request:
-    branches:
-      - master
+  release:
+    types: [published]
 
 jobs:
-  lint:
-    name: Check PHP Codes
-    uses: tarosky/workflows/.github/workflows/phpcs.yml@main
-    with:
-      version: 7.4
-
-  assets:
-    name: Assets Test
-    uses: tarosky/workflows/.github/workflows/npm.yml@main
-    with:
-      node_version: 18
-      package: build
-
-
-  status-check:
-    name: Status Check
-    runs-on: ubuntu-latest
-    needs: [ lint, assets ]
-    steps:
-      - name: Display Status
-        run: echo "Status Check Passed"
 
   release:
     name: Deploy Production Server
-    needs: [ status-check ]
-    if: contains(github.ref, 'tags/')
     runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://wp-checkin.com
     steps:
       - name: Checkout Code
         uses: actions/checkout@main
@@ -45,7 +19,7 @@ jobs:
       - name: Setup PHP with composer v2
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: 8.2
           tools: composer
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -53,7 +27,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '22'
 
       - name: Build Plugin
         run: |
@@ -67,7 +41,7 @@ jobs:
       - name: Versioning
         uses: tarosky/workflows/actions/versioning@main
         with:
-          version: ${{ github.ref }}
+          version: ${{ github.event.release.tag_name }}
           files: wp-checkin.php, readme.txt
 
       - name: Deploy to Production Server
@@ -89,25 +63,14 @@ jobs:
         uses: tarosky/workflows/actions/distignore@main
 
       - name: Zip Archive
-        run: zip -r ${{ github.event.repository.name }}.zip ./
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+        run: |
+          mkdir ${{ github.event.repository.name }}
+          rsync -av --exclude=${{ github.event.repository.name }} --exclude=.git ./ ./${{ github.event.repository.name }}/
+          zip -r ./${{ github.event.repository.name }}.zip ./${{ github.event.repository.name }}
 
       - name: Upload release asset
-        uses: actions/upload-release-asset@v1.0.1
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ github.event.repository.name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/${{ github.event.repository.name }}.zip
-          asset_name: ${{ github.event.repository.name }}.zip
-          asset_content_type: application/zip

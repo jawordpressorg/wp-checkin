@@ -34,6 +34,7 @@ $result = \WCTokyo\WpCheckin\Tickets::search( get_query_var( 's' ), $page );
 	<table class="wp-checkin-table">
 		<thead>
 		<tr>
+			<th>&nbsp;</th>
 			<th><?php esc_html_e( '氏名', 'wp-checkin' ); ?></th>
 			<th class="wp-checkin-hidden"><?php esc_html_e( '種別', 'wp-checkin' ); ?></th>
 			<th><?php esc_html_e( '購入日', 'wp-checkin' ); ?></th>
@@ -42,6 +43,9 @@ $result = \WCTokyo\WpCheckin\Tickets::search( get_query_var( 's' ), $page );
 		<tbody>
 		<?php foreach ( $result['tickets'] as $ticket ) : ?>
 			<tr class="wp-checkin-row">
+				<td>
+					<?php echo get_avatar( $ticket[4], 32 ); ?>
+				</td>
 				<td>
 					<a href="<?php echo home_url( '/checkin/ticket/' . $ticket[0] ); ?>">
 						<?php echo esc_html( wp_checkin_ticket_owner( $ticket ) ); ?>

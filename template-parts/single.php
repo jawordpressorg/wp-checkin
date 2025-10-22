@@ -28,6 +28,7 @@ if ( ! $ticket ) {
 <hr />
 
 <div class="wp-checkin-owner">
+	<p><?php echo get_avatar( $ticket[4] ); ?></p>
 	<h2><?php echo esc_html( wp_checkin_ticket_owner( $ticket ) ); ?></h2>
 	<small><?php echo esc_html( $ticket[1] ); ?></small>
 
@@ -35,10 +36,15 @@ if ( ! $ticket ) {
 </div>
 
 <table class="wp-checkin-ticket-detail">
-	<?php foreach ( wp_checkin_ticket_detail( $ticket ) as $label => $value ) : ?>
-	<tr>
-		<th><?php echo esc_html( $label ); ?></th>
-		<td><?php echo esc_html( $value ?: '---' ); ?></td>
-	</tr>
-	<?php endforeach; ?>
+	<caption>
+		<?php esc_html_e( 'チケット詳細', 'wp-checkin' ); ?>
+	</caption>
+	<tbody>
+		<?php foreach ( wp_checkin_ticket_detail( $ticket ) as $label => $value ) : ?>
+		<tr>
+			<th><?php echo esc_html( $label ); ?></th>
+			<td><?php echo esc_html( $value ?: '---' ); ?></td>
+		</tr>
+		<?php endforeach; ?>
+	</tbody>
 </table>

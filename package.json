@@ -9,26 +9,25 @@
 		"stop": "wp-env stop",
 		"env": "wp-env",
 		"env:install": "wp core download --path=wordpress --locale=ja",
-		"env:download": "node ./bin/compiler.js env",
 		"cli": "wp-env run cli wp",
 		"cli:test": "wp-env run tests-cli wp",
 		"test": "RESULT=${PWD##*/} && wp-env run tests-cli ./wp-content/plugins/$RESULT/vendor/bin/phpunit -c ./wp-content/plugins/$RESULT/phpunit.xml.dist",
 		"build": "npm run build:js && npm run build:css && npm run dump && npm run imagemin",
-		"build:block": "wp-scripts build --webpack-src-dir=src/blocks --output-path=build/blocks",
 		"build:css": "sass ./src/scss/:./build/css/ --style=compressed && postcss ./build/css/**/*.css --use autoprefixer --replace",
-		"build:js": "node ./bin/compiler.js js",
-		"create:block": "node ./bin/compiler.js block",
-		"dump": "node ./bin/compiler.js dump",
+		"build:js": "grab-deps js src/js build/js",
+		"dump": "grab-deps dump 'build/js,build/css'",
 		"lint": "npm run lint:js && npm run lint:css",
-		"lint:css": "wp-scripts lint-style ./src/**/*.scss",
+		"lint:css": "wp-scripts lint-style './src/**/*.scss'",
 		"lint:js": "eslint ./src/js",
 		"fix:js": "eslint --fix ./src/js",
-		"imagemin": "node ./bin/imagemin.mjs src/img build/img",
+		"imagemin": "grab-deps-image 'src/img/**/*.{jpg,png,gif,svg}' build/img",
 		"format:js": "eslint --fix ./src/js",
-		"watch": "npm-watch"
+		"format:css": "stylelint  --fix './src/**/*.scss'",
+		"watch": "npm-watch",
+		"prepare": "husky"
 	},
 	"engines": {
-		"node": ">= 18.19.0"
+		"node": ">= 22.0.0"
 	},
 	"repository": {
 		"type": "git",
@@ -44,35 +43,29 @@
 	},
 	"homepage": "https://github.com/jawordpressorg/wp-checkin#readme",
 	"devDependencies": {
-		"@kunoichi/grab-deps": "^1.3.1",
+		"@kunoichi/grab-deps": "^3.1.4",
 		"@wordpress/browserslist-config": "^5.32.0",
 		"@wordpress/create-block": "^4.33.0",
-		"@wordpress/env": "^9.1.0",
-		"@wordpress/eslint-plugin": "^17.6.0",
-		"@wordpress/scripts": "^27.0.0",
-		"@wordpress/stylelint-config": "^21.32.0",
+		"@wordpress/env": "^10.0.0",
+		"@wordpress/eslint-plugin": "^22.19.0",
+		"@wordpress/scripts": "^30.0.0",
+		"@wordpress/stylelint-config": "^23.0.0",
 		"autoprefixer": "^10.4.17",
 		"classnames": "^2.5.1",
-		"cssnano": "^6.0.3",
-		"eslint": "^8.56.0",
-		"glob": "^10.3.10",
-		"imagemin": "^8.0.1",
+		"cssnano": "^7.0.0",
+		"husky": "^9.1.7",
+		"imagemin": "^9.0.0",
 		"imagemin-gifsicle": "^7.0.0",
-		"imagemin-jpegtran": "^7.0.0",
-		"imagemin-pngquant": "^9.0.2",
-		"imagemin-svgo": "^10.0.1",
-		"npm-watch": "^0.11.0",
+		"imagemin-jpegtran": "^8.0.0",
+		"imagemin-pngquant": "^10.0.0",
+		"imagemin-svgo": "^11.0.0",
+		"lint-staged": "^16.2.5",
+		"npm-watch": "^0.13.0",
 		"postcss": "^8.4.33",
 		"postcss-cli": "^11.0.0",
 		"webpack-cli": "^5.1.4"
 	},
 	"watch": {
-		"build:block": {
-			"extensions": "js,scss,json",
-			"patterns": [
-				"src/blocks"
-			]
-		},
 		"build:css": {
 			"extensions": "scss",
 			"patterns": [
@@ -89,8 +82,7 @@
 			"extensions": "js,css,php,json",
 			"patterns": [
 				"build/js",
-				"build/css",
-				"build/blocks"
+				"build/css"
 			]
 		},
 		"imagemin": {
@@ -111,5 +103,19 @@
 				"src"
 			]
 		}
+	},
+	"volta": {
+		"node": "22.21.0"
+	},
+	"lint-staged": {
+		"*.php": [
+			"vendor/bin/phpcs --standard=phpcs.ruleset.xml"
+		],
+		"src/js/**/*.js": [
+			"eslint"
+		],
+		"src/scss/**/*.scss": [
+			"wp-scripts lint-style"
+		]
 	}
 }
