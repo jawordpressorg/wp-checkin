@@ -33,7 +33,7 @@ body {
     tr{
       display: block;
       border-bottom: 1px solid #ddd;
-      &:after{
+      &::after{
         content: "";
         display: block;
         height: 0;

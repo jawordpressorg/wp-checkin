@@ -28,6 +28,7 @@ if ( ! $ticket ) {
 <hr />
 
 <div class="wp-checkin-owner">
+	<p><?php echo get_avatar( $ticket[4] ); ?></p>
 	<h2><?php echo esc_html( wp_checkin_ticket_owner( $ticket ) ); ?></h2>
 	<small><?php echo esc_html( $ticket[1] ); ?></small>
 

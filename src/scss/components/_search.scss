@@ -17,6 +17,13 @@
 		}
 	}
 
+	.avatar {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
 	small {
 		display: block;
 		word-break: break-all;
@@ -51,7 +58,7 @@
 
 	&-summary {
 		font-size: 14px;
-		font-weight: bold;
+		font-weight: 700;
 		color: #666;
 	}
 }
@@ -103,5 +110,5 @@
 
 .wp-checkin-not-found {
 	text-align: center;
-	font-weight: bold;
+	font-weight: 700;
 }

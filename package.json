@@ -17,11 +17,12 @@
 		"build:js": "grab-deps js src/js build/js",
 		"dump": "grab-deps dump 'build/js,build/css'",
 		"lint": "npm run lint:js && npm run lint:css",
-		"lint:css": "wp-scripts lint-style ./src/**/*.scss",
+		"lint:css": "wp-scripts lint-style './src/**/*.scss'",
 		"lint:js": "eslint ./src/js",
 		"fix:js": "eslint --fix ./src/js",
 		"imagemin": "grab-deps-image 'src/img/**/*.{jpg,png,gif,svg}' build/img",
 		"format:js": "eslint --fix ./src/js",
+		"format:css": "stylelint  --fix './src/**/*.scss'",
 		"watch": "npm-watch",
 		"prepare": "husky"
 	},

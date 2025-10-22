@@ -82,7 +82,7 @@ class Command extends \WP_CLI_Command {
 		$url = add_query_arg( [
 			'g' => rawurlencode( $ticket[3] ),
 			'f' => rawurlencode( $ticket[2] ),
-			'e' => rawurlencode( $ticket[3] ),
+			'e' => rawurlencode( $ticket[4] ),
 		], home_url( '/checkin/qr.png' ) );
 		\WP_CLI::success( 'URL: ' . $url );
 	}
