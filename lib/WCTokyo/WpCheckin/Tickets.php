@@ -152,4 +152,44 @@ class Tickets {
 		}
 		return get_page_by_path( $ticket_id, OBJECT, 'checkin-log' );
 	}
+
+	/**
+	 * Get all unique ticket categories.
+	 *
+	 * @return string[]
+	 */
+	public static function get_categories() {
+		$categories = [];
+		foreach ( self::tickets( false ) as $ticket ) {
+			if ( ! empty( $ticket[1] ) && ! in_array( $ticket[1], $categories, true ) ) {
+				$categories[] = $ticket[1];
+			}
+		}
+		sort( $categories );
+		return $categories;
+	}
+
+	/**
+	 * Get items to distribute for a ticket category.
+	 *
+	 * @param string $category Ticket category.
+	 * @return string[]
+	 */
+	public static function get_category_items( $category ) {
+		$items_map = get_option( 'wordcamp_ticket_items', [] );
+		return isset( $items_map[ $category ] ) ? $items_map[ $category ] : [];
+	}
+
+	/**
+	 * Get items to distribute for a ticket.
+	 *
+	 * @param array $ticket Ticket array.
+	 * @return string[]
+	 */
+	public static function get_ticket_items( $ticket ) {
+		if ( empty( $ticket[1] ) ) {
+			return [];
+		}
+		return self::get_category_items( $ticket[1] );
+	}
 }

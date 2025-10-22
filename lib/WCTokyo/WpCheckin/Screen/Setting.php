@@ -46,6 +46,8 @@ class Setting extends SingletonPattern {
 				</form>
 				<h2><?php esc_html_e( 'チケット情報', 'wp-checkin' ); ?></h2>
 				<?php $this->csv_form(); ?>
+				<h2><?php esc_html_e( 'チケット種別ごとの配布物設定', 'wp-checkin' ); ?></h2>
+				<?php $this->items_form(); ?>
 				<h2><?php esc_html_e( 'HTMLタグ', 'wp-checkin' ); ?></h2>
 				<p>
 					<?php esc_html_e( 'WordCampサイトにおいてチケット購入者に送るメールに以下のHTMLタグを入力してください。チケットのチェックインページを開くQRコードが表示されます。', 'wp-checkin' ); ?>
@@ -95,6 +97,35 @@ HTML;
 			}, 'wp-checkin', 'wp_checkin_settings' );
 			register_setting( 'wp-checkin', $option_name );
 		}
+		// Register ticket items setting.
+		register_setting( 'wp-checkin-items', 'wordcamp_ticket_items', [
+			'sanitize_callback' => [ $this, 'sanitize_ticket_items' ],
+		] );
+	}
+
+	/**
+	 * Sanitize ticket items.
+	 *
+	 * @param array $value Input value.
+	 * @return array
+	 */
+	public function sanitize_ticket_items( $value ) {
+		if ( ! is_array( $value ) ) {
+			return [];
+		}
+		$sanitized = [];
+		foreach ( $value as $category => $items ) {
+			$category_sanitized = sanitize_text_field( $category );
+			if ( empty( $items ) ) {
+				continue;
+			}
+			// Split by newline and filter empty lines.
+			$items_array = array_filter( array_map( 'trim', explode( "\n", $items ) ) );
+			if ( ! empty( $items_array ) ) {
+				$sanitized[ $category_sanitized ] = array_map( 'sanitize_text_field', $items_array );
+			}
+		}
+		return $sanitized;
 	}
 
 	/**
@@ -191,6 +222,46 @@ HTML;
 			], admin_url( 'options-general.php' ) ) );
 			exit;
 		}
+	}
+
+	/**
+	 * Ticket items form.
+	 *
+	 * @return void
+	 */
+	protected function items_form() {
+		$categories = Tickets::get_categories();
+		if ( empty( $categories ) ) {
+			printf( '<p class="description">%s</p>', esc_html__( 'CSVをアップロードするとチケット種別が表示されます。', 'wp-checkin' ) );
+			return;
+		}
+		$items_map = get_option( 'wordcamp_ticket_items', [] );
+		?>
+		<form method="post" action="<?php echo admin_url( 'options.php' ); ?>">
+			<?php
+			settings_fields( 'wp-checkin-items' );
+			?>
+			<table class="form-table">
+				<tbody>
+					<?php foreach ( $categories as $category ) : ?>
+						<tr>
+							<th scope="row">
+								<?php echo esc_html( $category ); ?>
+							</th>
+							<td>
+								<?php
+								$items = isset( $items_map[ $category ] ) ? $items_map[ $category ] : [];
+								?>
+								<textarea name="wordcamp_ticket_items[<?php echo esc_attr( $category ); ?>]" rows="3" class="large-text"><?php echo esc_textarea( implode( "\n", $items ) ); ?></textarea>
+								<p class="description"><?php esc_html_e( '1行に1つずつ配布物を入力してください。', 'wp-checkin' ); ?></p>
+			</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+			<?php submit_button(); ?>
+		</form>
+		<?php
 	}
 
 	/**

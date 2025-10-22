@@ -109,10 +109,12 @@ class RestApi extends SingletonPattern {
 				}
 				return new \WP_REST_Response( [
 					'checked_in' => true,
+					'items'      => Tickets::get_ticket_items( $ticket ),
 				] );
 			case 'GET':
 				return new \WP_REST_Response( [
 					'checked_in' => (bool) $is_checked_in,
+					'items'      => $is_checked_in ? Tickets::get_ticket_items( $ticket ) : [],
 				] );
 			case 'DELETE':
 				if ( ! $is_checked_in ) {
