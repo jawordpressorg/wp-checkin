@@ -119,8 +119,13 @@ HTML;
 			if ( empty( $items ) ) {
 				continue;
 			}
-			// Split by newline and filter empty lines.
-			$items_array = array_filter( array_map( 'trim', explode( "\n", $items ) ) );
+			// Handle both string and array input.
+			if ( is_array( $items ) ) {
+				$items_array = $items;
+			} else {
+				// Split by newline and filter empty lines.
+				$items_array = array_filter( array_map( 'trim', explode( "\n", $items ) ) );
+			}
 			if ( ! empty( $items_array ) ) {
 				$sanitized[ $category_sanitized ] = array_map( 'sanitize_text_field', $items_array );
 			}
@@ -235,7 +240,7 @@ HTML;
 			printf( '<p class="description">%s</p>', esc_html__( 'CSVをアップロードするとチケット種別が表示されます。', 'wp-checkin' ) );
 			return;
 		}
-		$items_map = get_option( 'wordcamp_ticket_items', [] );
+		$items_map = (array) get_option( 'wordcamp_ticket_items', [] );
 		?>
 		<form method="post" action="<?php echo admin_url( 'options.php' ); ?>">
 			<?php
@@ -254,7 +259,7 @@ HTML;
 								?>
 								<textarea name="wordcamp_ticket_items[<?php echo esc_attr( $category ); ?>]" rows="3" class="large-text"><?php echo esc_textarea( implode( "\n", $items ) ); ?></textarea>
 								<p class="description"><?php esc_html_e( '1行に1つずつ配布物を入力してください。', 'wp-checkin' ); ?></p>
-			</td>
+							</td>
 						</tr>
 					<?php endforeach; ?>
 				</tbody>

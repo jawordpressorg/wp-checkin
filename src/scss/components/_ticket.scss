@@ -80,6 +80,16 @@
 	}
 }
 
+.wp-checkin-items {
+	ol {
+		margin: 10px auto 15px;
+		padding-bottom: 15px;
+		border-bottom: 1px solid #eee;
+		max-width: 320px;
+		text-align: left;
+	}
+}
+
 .wp-checkin-ticket-detail {
 	margin: 20px 0;
 	table-layout: auto;

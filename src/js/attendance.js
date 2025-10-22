@@ -39,22 +39,20 @@ const AttendingButton = ( props ) => {
 	}, [] );
 	return (
 		<>
+			{ items.length > 0 && (
+				<div className="wp-checkin-items">
+					<h3>{ __( 'お渡しするもの', 'wp-checkin' ) }</h3>
+					<ol>
+						{ items.map( ( item, index ) => (
+							<li key={ index }>{ item }</li>
+						) ) }
+					</ol>
+				</div>
+			) }
 			{ attending && (
-				<>
-					<p className="wp-checkin-owner-status">
-						<span className="dashicons dashicons-yes"></span> { __( 'チェックイン済み', 'wp-checkin' ) }
-					</p>
-					{ items.length > 0 && (
-						<div className="wp-checkin-items">
-							<h3>{ __( 'お渡しするもの', 'wp-checkin' ) }</h3>
-							<ol>
-								{ items.map( ( item, index ) => (
-									<li key={ index }>{ item }</li>
-								) ) }
-							</ol>
-						</div>
-					) }
-				</>
+				<p className="wp-checkin-owner-status">
+					<span className="dashicons dashicons-yes"></span> { __( 'チェックイン済み', 'wp-checkin' ) }
+				</p>
 			) }
 			<button disabled={ loading } className={ attending ? 'wp-checkin-btn-checked-in' : 'wp-checkin-btn-cancel' } onClick={ () => {
 				setLoading( true );
@@ -85,7 +83,6 @@ const AttendingButton = ( props ) => {
 						.then( ( response ) => {
 							setLoading( false );
 							setAttending( response.checked_in );
-							setItems( [] );
 						} )
 						.catch( ( err ) => {
 							setLoading( false );
