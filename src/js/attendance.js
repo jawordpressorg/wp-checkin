@@ -37,6 +37,11 @@ const AttendingButton = ( props ) => {
 	}, [] );
 	return (
 		<>
+			{ attending && (
+				<p className="wp-checkin-owner-status">
+					<span className="dashicons dashicons-yes"></span> { __( 'チェックイン済み', 'wp-checkin' ) }
+				</p>
+			) }
 			<button disabled={ loading } className={ attending ? 'wp-checkin-btn-checked-in' : 'wp-checkin-btn-cancel' } onClick={ () => {
 				setLoading( true );
 				if ( ! attending ) {
@@ -74,11 +79,6 @@ const AttendingButton = ( props ) => {
 			} }>
 				{ ! attending ? __( 'チェックイン', 'wp-checkin' ) : __( '取り消し', 'wp-checkin' ) }
 			</button>
-			{ attending && (
-				<p>
-					<span className="dashicons dashicons-yes"></span> { __( 'チェックイン済み', 'wp-checkin' ) }
-				</p>
-			) }
 		</>
 	);
 };
