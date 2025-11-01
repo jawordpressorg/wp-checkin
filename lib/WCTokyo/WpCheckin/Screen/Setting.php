@@ -255,9 +255,12 @@ HTML;
 							</th>
 							<td>
 								<?php
-								$items = isset( $items_map[ $category ] ) ? $items_map[ $category ] : [];
+								// Sanitize category name to match with saved data keys.
+								// Decode HTML entities first (e.g., &amp; -> &), then sanitize.
+								$sanitized_category = sanitize_text_field( html_entity_decode( $category, ENT_QUOTES, 'UTF-8' ) );
+								$items              = isset( $items_map[ $sanitized_category ] ) ? $items_map[ $sanitized_category ] : [];
 								?>
-								<textarea name="wordcamp_ticket_items[<?php echo esc_attr( $category ); ?>]" rows="3" class="large-text"><?php echo esc_textarea( implode( "\n", $items ) ); ?></textarea>
+								<textarea name="wordcamp_ticket_items[<?php echo esc_attr( $sanitized_category ); ?>]" rows="3" class="large-text"><?php echo esc_textarea( implode( "\n", $items ) ); ?></textarea>
 								<p class="description"><?php esc_html_e( '1行に1つずつ配布物を入力してください。', 'wp-checkin' ); ?></p>
 							</td>
 						</tr>

@@ -17,6 +17,18 @@
 		}
 	}
 
+	.wp-checkin-ticket-label {
+		display: inline-block;
+		padding: 0.125em 0.25em;
+		background-color: #ddd;
+		color: #444;
+	}
+
+	.wp-checkin-mail {
+		font-family: monospace;
+		margin-left: 0.5em;
+	}
+
 	.avatar {
 		width: 32px;
 		height: 32px;
