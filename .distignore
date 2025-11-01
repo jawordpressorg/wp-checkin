@@ -22,3 +22,4 @@ webpack.config.js
 wordpress
 bin
 tests
+src
